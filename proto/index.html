@@ -1,0 +1,76 @@
+<html>
+<head>
+  <title>proto</title>
+</head>
+
+<body>
+
+<script>
+var HVdoo = HVdoo || {};
+HVdoo.entities = HVdoo.engities || {};
+HVdoo.entities.Entity = function(x, y, w, h) {
+   var pos = {x:x, y:y};
+   var size = {w:w, h:h};
+
+   var _update = function(){};
+
+   this.getPos = function(){
+      return pos;
+   };
+
+   this.setPos = function(pPos) {
+      pos = pPos;
+   };
+
+   this.getSize = function() {
+      return size;
+   };
+
+   this.setSize = function(pSize) {
+      size = pSize;
+   };
+
+   this.onUpdate = function(cb) {
+      _update = cb;
+   };
+
+   this.update = function() {
+      return _update();
+   };
+};
+
+HVdoo.entities.HeroEntity = (function() {
+   var HeroEntity = function(x, y, w, h, sprite){
+      // Call parent contructor
+      HVdoo.entities.Entity.call(this, x, y, w, h);
+
+      var img = new Image();
+      img.src = sprite;
+
+      this.getSprite = function() {
+         var pos = this.getPos();
+         var size = this.getSize();
+
+         return {
+            x: pos.x,
+            y: pos.y,
+            width: size.w,
+            height: size.h,
+            img: img
+         };
+      };
+   };
+
+   HeroEntity.prototype = Object.create(HVdoo.entities.Entity.prototype);
+
+   return HeroEntity;
+
+})();
+
+var e = new HVdoo.entities.Entity(2, 3);
+var h = new HVdoo.entities.HeroEntity(23, 42, 32, 32, "/html5voodoo/elements-icons.png");
+</script>
+
+</body>
+</html>
+
