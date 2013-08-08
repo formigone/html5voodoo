@@ -1,0 +1,1 @@
+var HVdoo = HVdoo || {};

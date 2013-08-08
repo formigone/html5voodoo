@@ -1,0 +1,1 @@
+HVdoo.entities = HVdoo.entities || {};

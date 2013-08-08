@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Build example" default="all" basedir=".">
+	<property name="SRC_JS_DIR" value="js/hvdoo" />
+	<property name="DIST_JS_DIR" value="js/out" />
+	<property name="DIST_JS_TMP" value="${DIST_JS_DIR}/tmp" />
+
+	<property name="COPYRIGHT" value="${SRC_JS_DIR}/__copyright.js" />
+	<property name="JS_OUT_DEF" value="${DIST_JS_TMP}/__def.js" />
+	<property name="JS_OUT_CODE" value="${DIST_JS_TMP}/__code.js" />
+	<property name="JS_OUT_LINKED" value="${DIST_JS_TMP}/__out.js" />
+	<property name="JS_OUT_PRE_BUILT" value="${DIST_JS_TMP}/__hvdoo.js" />
+	<property name="JS_OUT_BUILT" value="${DIST_JS_DIR}/hvdoo.js" />
+
+	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+		classpath="/usr/local/google-clojure/compiler.jar" />
+
+	<target name="makeDef">
+		<concat destfile="${JS_OUT_DEF}">
+			<fileset dir="${SRC_JS_DIR}" includes="**/__def.js" />
+		</concat>
+	</target>
+
+	<target name="makeCode">
+		<concat destfile="${JS_OUT_CODE}">
+			<fileset dir="${SRC_JS_DIR}" includes="**/*.js" excludes="**/__*.js" />
+		</concat>
+	</target>
+
+	<target name="link">
+		<concat destfile="${JS_OUT_LINKED}">
+			<file name="${JS_OUT_DEF}" />
+			<file name="${JS_OUT_CODE}" />
+		</concat>
+	</target>
+
+	<target name="copyright">
+		<concat destfile="${JS_OUT_BUILT}">
+			<file name="${COPYRIGHT}" />
+			<file name="${JS_OUT_PRE_BUILT}" />
+		</concat>
+	</target>
+
+	<target name="clojure">
+		<jscomp compilationLevel="simple" warning="verbose" debug="false"
+			output="${JS_OUT_PRE_BUILT}">
+
+			<sources dir="${DIST_JS_TMP}">
+				<file name="__out.js" />
+			</sources>
+
+		</jscomp>
+	</target>
+
+	<target name="clean">
+		<delete dir="${DIST_JS_TMP}" />
+	</target>
+
+	<target name="all"
+		depends="makeDef, makeCode, link, clojure, copyright, clean"></target>
+</project>
