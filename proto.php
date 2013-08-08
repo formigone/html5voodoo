@@ -11,7 +11,7 @@
 
 	<script src="js/out/hvdoo.js"></script><script>
 var e = new HVdoo.entities.Entity(2, 3);
-var h = new HVdoo.entities.HeroEntity(23, 42, 32, 32, "elements-icons.png");
+var h = new HVdoo.entities.HeroEntity(23, 42, 32, 32, "img/elements-icons.png");
 
 document.body.appendChild(h.getSprite().img);
 </script>

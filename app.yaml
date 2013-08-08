@@ -7,5 +7,14 @@ handlers:
 - url: /img
   static_dir: img
 
+- url: /js
+  static_dir: js
+
+- url: /proto
+  script: proto.php
+
 - url: /.*
   script: index.html
+
+skip_files:
+- js/htvoo/.*
