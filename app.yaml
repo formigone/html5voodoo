@@ -17,4 +17,4 @@ handlers:
   script: index.html
 
 skip_files:
-- ^(.*/)?.*/js/hvdoo/.*
+- ^(.*/)?.*js/hvdoo/.*
