@@ -1,0 +1,82 @@
+{
+   entities: {
+      Entity: {
+         x: 0,
+         y: 0,
+         sprite: util.graphics.Drawable,
+         components: components.Component
+      }
+   },
+
+   components: {
+      Component: {
+         components: {},
+         has: function(key),
+         set: function(key, val),
+         get: function(key)
+      }
+   },
+      
+   util: {
+      graphics: {
+         Renderer: {
+            // Def: 
+            //  - HTMLCanvasElement
+            //  - CanvasRenderingContext2D
+         },
+         Drawable: {
+            Drawable: function(imgPath, width, height){
+               size = new util.math.Vec2(width, height);
+               img = new Image();
+               img.src = imgPath;
+            },
+            size: util.math.Vec2,
+            img: HTMLImageElement,
+            draw: function(util.graphics.Renderer renderer, x, y){
+               renderer.render(img, x, y, size.w, size.h);
+            },
+            getSize: function(){
+               return size;
+            },
+            setSize: function(util.math.Vec2 vec2){
+               size = vec2;
+            }
+         }
+      },
+      
+      math: {
+         Vec2: {
+            el: {
+               x: 0,
+               y: 0,
+            },
+            add: function(util.math.Vec2 vec2){
+               vec2 = vec2.get();
+               el.x += vec2.x;
+               el.y += vec2.y;
+            },
+            subt: function(util.math.Vec2 vec2){
+               vec2 = vec2.get();
+               el.x -= vec2.x;
+               el.y -= vec2.y;
+            },
+            mult: function(scal){
+               el.x *= scal;
+               el.y *= scal;
+            },
+            normalize: function(){
+               // TODO: implement
+            },
+            get: function(){
+               return el;
+            },
+            set: function(x, y){ 
+               el.x = x || el.x;
+               el.y = y || el.y;
+               return el;
+            }
+         }
+      }
+   }
+}
+
