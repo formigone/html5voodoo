@@ -28,22 +28,28 @@
 
 	<target name="link">
 		<concat destfile="${JS_OUT_LINKED}">
-			<file name="${JS_OUT_DEF}" />
-			<file name="${JS_OUT_CODE}" />
+                        <filelist dir="${DIST_JS_TMP}">
+				<file name="${JS_OUT_DEF}" />
+				<file name="${JS_OUT_CODE}" />
+			</filelist>
 		</concat>
 	</target>
 
 	<target name="linkToOut">
 		<concat destfile="${JS_OUT_BUILT}">
-			<file name="${JS_OUT_DEF}" />
-			<file name="${JS_OUT_CODE}" />
+			<filelist dir="${DIST_JS_TMP}">
+				<file name="${JS_OUT_DEF}" />
+				<file name="${JS_OUT_CODE}" />
+			</filelist>
 		</concat>
 	</target>
 
 	<target name="copyright">
 		<concat destfile="${JS_OUT_BUILT}">
-			<file name="${COPYRIGHT}" />
-			<file name="${JS_OUT_PRE_BUILT}" />
+                        <filelist dir="${basedir}">
+				<file name="${COPYRIGHT}" />
+				<file name="${JS_OUT_PRE_BUILT}" />
+			</filelist>
 		</concat>
 	</target>
 
