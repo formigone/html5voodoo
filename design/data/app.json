@@ -3,6 +3,7 @@
       Entity: {
          pos: util.math.Vec2,
          dir: util.math.Vec2,
+         vel: util.math.Vec2,
          sprite: util.graphics.Drawable,
          components: components.ComponentManager,
          update: function(){
@@ -22,6 +23,12 @@
          },
          setDir: function(util.math.Vec2 dir){
             dir = dir;
+         },
+         getVel: function(){
+            return vel;
+         },
+         setVel: function(util.math.Vec2 vel){
+            vel = vel;
          }
       }
    },
@@ -51,8 +58,22 @@
             // TODO: override
          }
       },
+      Movement::Component: {
+         entity: entities.Entity,
+         controller: util.input.Controller,
+         exec: function () {
+            if (controller.isSet("UP")) {
+               entity.setVel(null, -1);
+            }
+            if (controller.isSet("RIGHT")) {
+               entity.setVel(1, null);
+            }
+            /* ... */
+         }
+      },
       Drawable::Component: {
-            Drawable: function(util.graphics.Renderer2D renderer, entities.Entity entity, imgPath, width, height, srcX, srcY, srcWdith, srcHeight){
+            Drawable: function(util.graphics.Renderer2D renderer, entities.Entity entity, imgPath, width, height, 
+                  srcX, srcY, srcWdith, srcHeight){
                renderer = renderer;
                entity = entities.Entity;
                size = new util.math.Vec2(width, height);
@@ -140,7 +161,24 @@
             // TODO: Define. This should be similar to a Drawable, but not quite the same thing. For one, it's not associated with an entity. Also, a map should contain all the tile information for the map it represents, as well as the image resource to be drawn for each tile. Ideally, a map should be drawn on its own canvas, but doesn't have to be so.
          }
       },
-      
+      input: {
+         Controller: {
+            keys: {
+               UP: 89,
+               DOWN: 90,
+               LEFT: 91,
+               /* ... */
+            },
+            controller: {
+            },
+            set: function (key, val) {
+               controller[key] = val;
+            },
+            isSet: function (key) {
+               return controller[keys[key]]; 
+            }
+         },
+      },      
       math: {
          Vec2: {
             el: {

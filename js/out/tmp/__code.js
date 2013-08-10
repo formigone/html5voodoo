@@ -73,69 +73,76 @@ HVdoo.components.Drawable = (function() {
 	Drawable.prototype = Object.create(HVdoo.components.Component.prototype);
 	return Drawable;
 })();
-HVdoo.entities.Entity = function(sprite, x, y) {
-	var pos = new HVdoo.util.math.Vec2(x || 0, y || 0);
-    var dir = new HVdoo.util.math.Vec2(0, 0);
-    var sprite;
-    var components = new HVdoo.components.ComponentManager();
+HVdoo.components.Movement = (function() {
 
-    this.update = function() {
-       components.exec();
-    };
-    
-    this.draw = function() {
-    	if (sprite !== undefined) {
-    		sprite.exec();
-    	}
-    };
+	var entity;
+	var controller;
+	
+	var Movement = function(entity,  controller) {
+		entity = entity;
+		controller = controller;
+		
+		this.exec = function() {
+			entity.getDir().zero();
+			if (controller.isSet("UP")) entity.setDir(null, -1);
+			if (controller.isSet("DOWN")) entity.setDir(null, 1);
+			if (controller.isSet("LEFT")) entity.setDir(-1, null);
+			if (controller.isSet("RIGHT")) entity.setDir(1, null);
 
-    this.setSprite = function(drawable) {
-    	sprite = drawable || null;
-    };
-    
-    this.getPos = function() {
-       return pos;
-    };
-    
-    this.setPos = function(pos) {
-       pos = pos;
-    };
-    
-    this.getDir = function() {
-       return dir;
-    };
-    
-    this.setDir = function(dir) {
-       dir = dir;
-    };
-};
-HVdoo.entities.HeroEntity = (function() {
-   var HeroEntity = function(x, y, w, h, sprite){
-      // Call parent contructor
-      HVdoo.entities.Entity.call(this, x, y, w, h);
-
-      var img = new Image();
-      img.src = sprite;
-
-      this.getSprite = function() {
-         var pos = this.getPos();
-         var size = this.getSize();
-
-         return {
-            x: pos.x,
-            y: pos.y,
-            width: size.w,
-            height: size.h,
-            img: img
-         };
-      };
-   };
-
-   HeroEntity.prototype = Object.create(HVdoo.entities.Entity.prototype);
-
-   return HeroEntity;
-
+			entity.move();
+		};
+	};
+	
+	Movement.prototype = Object.create(HVdoo.components.Component.prototype);
+	return Movement;
 })();
+HVdoo.entities.Entity = function(x, y, dX, dY, componentManager) {
+	var pos = new HVdoo.util.math.Vec2(x || 0, y || 0);
+	var dir = new HVdoo.util.math.Vec2(0, 0);
+	var vel = new HVdoo.util.math.Vec2(dX || 5, dY || 5);
+	var sprite;
+	var components = componentManager;
+
+	this.update = function() {
+		components.exec();
+	};
+
+	this.draw = function() {
+		if (sprite !== undefined) {
+			sprite.exec();
+		}
+	};
+
+	this.setSprite = function(drawable) {
+		sprite = drawable || null;
+	};
+
+	this.getPos = function() {
+		return pos;
+	};
+
+	this.getDir = function() {
+		return dir;
+	};
+
+	this.setDir = function(x, y) {
+		dir.set(x, y);
+	};
+
+	this.getVel = function() {
+		return vel;
+	};
+
+	this.setVel = function(x, y) {
+		vel.set(x, y);
+	};
+
+	this.move = function() {
+		var _dir = dir.get();
+		var _vel = vel.get();
+		pos.add(_dir.x * _vel.x, _dir.y * _vel.y);
+	};
+};
 HVdoo.util.graphics.Renderer2D = function(width, height) {
 	var canvas = document.createElement("canvas");
 	canvas.setAttribute("width", width || 800);
@@ -161,29 +168,57 @@ HVdoo.util.graphics.Renderer2D = function(width, height) {
 		}
 	};
 };
+HVdoo.util.input.Controller = function() {
+	var controller = {};
+    var keys = {
+    		SPACE: 32,
+    		LEFT: 37,
+    		UP: 38,
+    		RIGHT: 39,
+    		DOWN: 40,
+    		A: 65,
+    		S: 83,
+    		D: 68,
+    		F: 70
+    };
+
+    set = function(key, val) {
+    	controller[key] = val;
+	};
+	
+	this.isSet = function(key) {
+		return controller[keys[key]]; 
+	};
+
+	this.onKeyDown = function(event) {
+		set(event.keyCode, true);
+	};
+	
+	this.onKeyUp = function(event) {
+		set(event.keyCode, false);
+	};
+};
 HVdoo.util.math.Vec2 = function(x, y) {
     var el = {
         x: (x || 0),
-        y: (y || 0),
+        y: (y || 0)
      };
 
-    this.add = function(vec2) {
-        vec2 = vec2.get();
-        el.x += vec2.x;
-        el.y += vec2.y;
+    this.add = function(x, y) {
+        el.x += (x || 0);
+        el.y += (y || 0);
      };
-     
-     this.subt = function(vec2) {
-        vec2 = vec2.get();
-        el.x -= vec2.x;
-        el.y -= vec2.y;
+
+     this.subt = function(x, y) {
+        el.x -= (x || 0);
+        el.y -= (y || 0);
      };
      
      this.mult = function(scal) {
         el.x *= scal;
         el.y *= scal;
      };
-     
+
      this.normalize = function() {
     	 var length = Math.sqrt(el.x * el.x + el.y * el.y);
     	 el.x /= length;
@@ -195,10 +230,15 @@ HVdoo.util.math.Vec2 = function(x, y) {
      this.get = function() {
         return el;
      };
-     
+
      this.set = function(x, y) { 
         el.x = x || el.x;
         el.y = y || el.y;
         return el;
+     };
+
+     this.zero = function() {
+    	 el.x = 0;
+    	 el.y = 0;
      };
 }
