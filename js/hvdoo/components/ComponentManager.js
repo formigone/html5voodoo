@@ -24,8 +24,6 @@ HVdoo.components.ComponentManager = (function() {
 		}
 	};
 
-	ComponentManager.prototype = Object
-			.create(HVdoo.components.Component.prototype);
-
+	ComponentManager.prototype = Object.create(HVdoo.components.Component.prototype);
 	return ComponentManager;
 })();
