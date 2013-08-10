@@ -1,8 +1,7 @@
 {
    entities: {
       Entity: {
-         x: 0,
-         y: 0,
+         pos: util.math.Vec2,
          dir: util.math.Vec2,
          sprite: util.graphics.Drawable,
          components: components.ComponentManager,
@@ -11,6 +10,18 @@
          },
          draw: function(){
             sprite.draw();
+         },
+         getPos: function(){
+            return pos;
+         },
+         setPos: function(util.math.Vec2 pos){
+            pos = pos;
+         },
+         getDir: function(){
+            return dir;
+         },
+         setDir: function(util.math.Vec2 dir){
+            dir = dir;
          }
       }
    },
@@ -39,6 +50,69 @@
          exec: function(){
             // TODO: override
          }
+      },
+      Drawable::Component: {
+            Drawable: function(util.graphics.Renderer2D renderer, entities.Entity entity, imgPath, width, height, srcX, srcY, srcWdith, srcHeight){
+               renderer = renderer;
+               entity = entities.Entity;
+               size = new util.math.Vec2(width, height);
+               img = new Image();
+               img.src = imgPath;
+            },
+            srcImg: {
+               x: srcX || 0,
+               y: srcY || 0,
+               width: srcWidth || width,
+               height: srcHeight || height
+            },
+            renderer: util.graphics.Renderer2D,
+            entity = entities.Entity,
+            size: util.math.Vec2,
+            img: HTMLImageElement,
+            exec: function(){
+               pos = entity.getPos().get();
+               renderer.render(img, srcImg.x, srcImg.y, srcImg.width, srcImg.height, pos.x, pos.y, size.w, size.h);
+            },
+            getSize: function(){
+               return size;
+            },
+            setSize: function(util.math.Vec2 vec2){
+               size = vec2;
+            }
+      },
+      Anim::Drawable: {
+         Anim: function(Drawable sprites[]) {
+            sprites: sprites;
+         },
+         current: 0,
+         doOnCurrent: function(util.math.Vec2 dir) {
+            // TODO: override
+            dir = dir.get();
+
+            if (dir.x > 0) {
+               _current = 1;
+            } else if (dir.x < 0) {
+               _current = 2;
+            } else {
+               _current = 0;
+            }
+            
+            return _current;
+         },
+         exec: function(){
+            dir = entity.getDir().get();
+            current = doOnCurrent(dir);
+            sprites[current].exec();
+         },
+         getSize: function(){
+            return sprites[current].getSize();
+         },
+         setSize: function(util.math.Vec2 vec2){
+            sprites[current].setSize(vec2);
+         },
+         onCurrent: function(cb) {
+            doOnCurrent = cb;
+         }
       }
    },
       
@@ -56,62 +130,8 @@
             render: function(HTMLImageElement img, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight){
             }
          },
-         Drawable: {
-            Drawable: function(imgPath, width, height, srcX, srcY, srcWdith, srcHeight){
-               size = new util.math.Vec2(width, height);
-               img = new Image();
-               img.src = imgPath;
-            },
-            srcImg: {
-               x: srcX || 0,
-               y: srcY || 0,
-               width: srcWidth || width,
-               height: srcHeight || height
-            },
-            size: util.math.Vec2,
-            img: HTMLImageElement,
-            draw: function(util.graphics.Renderer2D renderer, x, y){
-               renderer.render(img, srcImg.x, srcImg.y, srcImg.width, srcImg.height, x, y, size.w, size.h);
-            },
-            getSize: function(){
-               return size;
-            },
-            setSize: function(util.math.Vec2 vec2){
-               size = vec2;
-            }
-         }
-         Anim::Drawable {
-            Anim: function(Drawable sprites[]) {
-               sprites: sprites;
-            },
-            current: 0,
-            doOnCurrent: function(util.math.Vec2 dir) {
-               // TODO: override
-               dir = dir.get();
-
-               if (dir.x > 0) {
-                  _current = 1;
-               } else if (dir.x < 0) {
-                  _current = 2;
-               } else {
-                  _current = 0;
-               }
-               
-               return _current;
-            },
-            draw: function(util.graphics.Renderer2D renderer, x, y, util.math.Vec2 dir){
-               current = doOnCurrent(dir);
-               sprites[current].draw(renderer, x, y);
-            },
-            getSize: function(){
-               return sprites[current].getSize();
-            },
-            setSize: function(util.math.Vec2 vec2){
-               sprites[current].setSize(vec2);
-            },
-            onCurrent: function(cb) {
-               doOnCurrent = cb;
-            }
+         Map: {
+            // TODO: Define. This should be similar to a Drawable, but not quite the same thing. For one, it's not associated with an entity. Also, a map should contain all the tile information for the map it represents, as well as the image resource to be drawn for each tile. Ideally, a map should be drawn on its own canvas, but doesn't have to be so.
          }
       },
       

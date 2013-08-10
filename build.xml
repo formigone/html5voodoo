@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Build example" default="all" basedir=".">
-	<property name="SRC_JS_DIR" value="js/hvdoo" />
-	<property name="DIST_JS_DIR" value="js/out" />
-	<property name="DIST_JS_TMP" value="${DIST_JS_DIR}/tmp" />
+	<property name="SRC_JS_DIR" value="${basedir}/js/hvdoo" />
+	<property name="DIST_JS_DIR" value="${basedir}/js/out" />
+	<property name="DIST_JS_TMP" value="${basedir}/js/out/tmp" />
 
 	<property name="COPYRIGHT" value="${SRC_JS_DIR}/__copyright.js" />
 	<property name="JS_OUT_DEF" value="${DIST_JS_TMP}/__def.js" />
@@ -33,6 +33,13 @@
 		</concat>
 	</target>
 
+	<target name="linkToOut">
+		<concat destfile="${JS_OUT_BUILT}">
+			<file name="${JS_OUT_DEF}" />
+			<file name="${JS_OUT_CODE}" />
+		</concat>
+	</target>
+
 	<target name="copyright">
 		<concat destfile="${JS_OUT_BUILT}">
 			<file name="${COPYRIGHT}" />
@@ -57,4 +64,5 @@
 
 	<target name="all"
 		depends="makeDef, makeCode, link, clojure, copyright, clean"></target>
+	<target name="quick" depends="makeDef, makeCode, linkToOut"></target>
 </project>

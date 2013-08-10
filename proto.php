@@ -13,6 +13,12 @@
 var e = new HVdoo.entities.Entity(2, 3);
 var h = new HVdoo.entities.HeroEntity(23, 42, 32, 32, "img/elements-icons.png");
 
+var c = new HVdoo.components.Component();
+c.exec = function(){ console.log("in gen comp func"); };
+
+var cm = new HVdoo.components.ComponentManager();
+cm.set("gen", c);
+
 document.body.appendChild(h.getSprite().img);
 </script>
 
