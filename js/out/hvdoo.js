@@ -189,7 +189,7 @@ HVdoo.util.input.Controller = function() {
     		F: 70
     };
 
-    set = function(key, val) {
+    var set = function(key, val) {
     	controller[key] = val;
 	};
 	

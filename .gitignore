@@ -2,5 +2,6 @@
 .externalToolBuilders/
 .project
 .settings/
+js/out/tmp
 *.*~
 
