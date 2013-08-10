@@ -3,43 +3,114 @@
       Entity: {
          x: 0,
          y: 0,
+         dir: util.math.Vec2,
          sprite: util.graphics.Drawable,
-         components: components.Component
+         components: components.ComponentManager,
+         update: function(){
+            components.exec();
+         },
+         draw: function(){
+            sprite.draw();
+         }
       }
    },
 
    components: {
-      Component: {
+      ComponentManager: {
          components: {},
-         has: function(key),
-         set: function(key, val),
-         get: function(key)
+         has: function(key){
+            return get(key) === undefined;
+         },
+         set: function(key, val) {
+            components[key] = val;
+         },
+         get: function(key) {
+            return components[key];
+         },
+         update: function(){
+            for (c in components){
+               if (components[c] instanceof components.Component){
+                  components[c].exec();
+               }
+            }
+         }
+      },
+      Component: {
+         exec: function(){
+            // TODO: override
+         }
       }
    },
       
    util: {
       graphics: {
-         Renderer: {
-            // Def: 
-            //  - HTMLCanvasElement
-            //  - CanvasRenderingContext2D
+         Renderer2D: {
+            Renderer2D: function(width, height){
+               canvas = document.createElement("canvas");
+               canvas.setAttribute("width", width);
+               canvas.setAttribute("height", height);
+               ctx = canvas.getContext("2d");
+            }
+            canvas: HTMLCanvasElement,
+            ctx: CanvasRenderingContext2D,
+            render: function(HTMLImageElement img, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight){
+            }
          },
          Drawable: {
-            Drawable: function(imgPath, width, height){
+            Drawable: function(imgPath, width, height, srcX, srcY, srcWdith, srcHeight){
                size = new util.math.Vec2(width, height);
                img = new Image();
                img.src = imgPath;
             },
+            srcImg: {
+               x: srcX || 0,
+               y: srcY || 0,
+               width: srcWidth || width,
+               height: srcHeight || height
+            },
             size: util.math.Vec2,
             img: HTMLImageElement,
-            draw: function(util.graphics.Renderer renderer, x, y){
-               renderer.render(img, x, y, size.w, size.h);
+            draw: function(util.graphics.Renderer2D renderer, x, y){
+               renderer.render(img, srcImg.x, srcImg.y, srcImg.width, srcImg.height, x, y, size.w, size.h);
             },
             getSize: function(){
                return size;
             },
             setSize: function(util.math.Vec2 vec2){
                size = vec2;
+            }
+         }
+         Anim::Drawable {
+            Anim: function(Drawable sprites[]) {
+               sprites: sprites;
+            },
+            current: 0,
+            doOnCurrent: function(util.math.Vec2 dir) {
+               // TODO: override
+               dir = dir.get();
+
+               if (dir.x > 0) {
+                  _current = 1;
+               } else if (dir.x < 0) {
+                  _current = 2;
+               } else {
+                  _current = 0;
+               }
+               
+               return _current;
+            },
+            draw: function(util.graphics.Renderer2D renderer, x, y, util.math.Vec2 dir){
+               current = doOnCurrent(dir);
+               sprites[current].draw(renderer, x, y);
+            },
+            getSize: function(){
+               return sprites[current].getSize();
+            },
+            setSize: function(util.math.Vec2 vec2){
+               sprites[current].setSize(vec2);
+            },
+            onCurrent: function(cb) {
+               doOnCurrent = cb;
             }
          }
       },
