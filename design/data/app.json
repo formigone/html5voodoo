@@ -113,6 +113,9 @@
          onCurrent: function(cb) {
             doOnCurrent = cb;
          }
+      },
+      Gameloop::Component {
+         // TODO: Implement
       }
    },
       
@@ -128,6 +131,9 @@
             canvas: HTMLCanvasElement,
             ctx: CanvasRenderingContext2D,
             render: function(HTMLImageElement img, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight){
+            },
+            clear: function(x, y, width, height) {
+               ctx.clearRect(x || 0, y || 0, width || canvas.width, height || canvas.height);
             }
          },
          Map: {

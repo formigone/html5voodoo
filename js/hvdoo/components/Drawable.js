@@ -4,18 +4,18 @@ HVdoo.components.Drawable = (function() {
 	var entity;
 	var size;
 	var img;
-	var srcImage = {
+	var srcImg = {
 			x: 0,
 			y: 0,
 			width: 0,
 			height: 0
 	};
 	
-	var Drawable = function(renderer, entity,  imgPath, 
-			width, height, srcX, srcY, srcWdith, srcHeight) {
+	var Drawable = function(renderer, entity,  imgPath, width, height, 
+			srcX, srcY, srcWidth, srcHeight) {
 		renderer = renderer;
 		entity = entity;
-		size = new HVdoo.util.math.Vec2(width, height);
+		size = new HVdoo.util.math.Vec2(width || 64, height || 64);
 		img = new Image();
 		img.src = imgPath;
 		srcImg.x = srcX || 0;
@@ -24,8 +24,9 @@ HVdoo.components.Drawable = (function() {
 		srcImg.height = srcHeight || height;
 		
 		this.exec = function() {
-			pos = entity.getPos().get();
-			renderer.render(img, srcImg.x, srcImg.y, srcImg.width, srcImg.height, pos.x, pos.y, size.w, size.h);
+			var pos = entity.getPos().get();
+			var s = size.get();
+			renderer.render(img, srcImg.x, srcImg.y, srcImg.width, srcImg.height, pos.x, pos.y, s.x, s.y);
 		};
 		
 		this.getSize = function() {

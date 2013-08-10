@@ -36,18 +36,18 @@ HVdoo.components.Drawable = (function() {
 	var entity;
 	var size;
 	var img;
-	var srcImage = {
+	var srcImg = {
 			x: 0,
 			y: 0,
 			width: 0,
 			height: 0
 	};
 	
-	var Drawable = function(renderer, entity,  imgPath, 
-			width, height, srcX, srcY, srcWdith, srcHeight) {
+	var Drawable = function(renderer, entity,  imgPath, width, height, 
+			srcX, srcY, srcWidth, srcHeight) {
 		renderer = renderer;
 		entity = entity;
-		size = new HVdoo.util.math.Vec2(width, height);
+		size = new HVdoo.util.math.Vec2(width || 64, height || 64);
 		img = new Image();
 		img.src = imgPath;
 		srcImg.x = srcX || 0;
@@ -56,8 +56,9 @@ HVdoo.components.Drawable = (function() {
 		srcImg.height = srcHeight || height;
 		
 		this.exec = function() {
-			pos = entity.getPos().get();
-			renderer.render(img, srcImg.x, srcImg.y, srcImg.width, srcImg.height, pos.x, pos.y, size.w, size.h);
+			var pos = entity.getPos().get();
+			var s = size.get();
+			renderer.render(img, srcImg.x, srcImg.y, srcImg.width, srcImg.height, pos.x, pos.y, s.x, s.y);
 		};
 		
 		this.getSize = function() {
@@ -72,35 +73,41 @@ HVdoo.components.Drawable = (function() {
 	Drawable.prototype = Object.create(HVdoo.components.Component.prototype);
 	return Drawable;
 })();
-HVdoo.entities.Entity = function(x, y, w, h) {
-   var pos = {x:x, y:y};
-   var size = {w:w, h:h};
+HVdoo.entities.Entity = function(sprite, x, y) {
+	var pos = new HVdoo.util.math.Vec2(x || 0, y || 0);
+    var dir = new HVdoo.util.math.Vec2(0, 0);
+    var sprite;
+    var components = new HVdoo.components.ComponentManager();
 
-   var _update = function(){};
+    this.update = function() {
+       components.exec();
+    };
+    
+    this.draw = function() {
+    	if (sprite !== undefined) {
+    		sprite.exec();
+    	}
+    };
 
-   this.getPos = function(){
-      return pos;
-   };
-
-   this.setPos = function(pPos) {
-      pos = pPos;
-   };
-
-   this.getSize = function() {
-      return size;
-   };
-
-   this.setSize = function(pSize) {
-      size = pSize;
-   };
-
-   this.onUpdate = function(cb) {
-      _update = cb;
-   };
-
-   this.update = function() {
-      return _update();
-   };
+    this.setSprite = function(drawable) {
+    	sprite = drawable || null;
+    };
+    
+    this.getPos = function() {
+       return pos;
+    };
+    
+    this.setPos = function(pos) {
+       pos = pos;
+    };
+    
+    this.getDir = function() {
+       return dir;
+    };
+    
+    this.setDir = function(dir) {
+       dir = dir;
+    };
 };
 HVdoo.entities.HeroEntity = (function() {
    var HeroEntity = function(x, y, w, h, sprite){
@@ -129,8 +136,30 @@ HVdoo.entities.HeroEntity = (function() {
    return HeroEntity;
 
 })();
-HVdoo.util.graphics.Renderer2D = function() {
+HVdoo.util.graphics.Renderer2D = function(width, height) {
+	var canvas = document.createElement("canvas");
+	canvas.setAttribute("width", width || 800);
+	canvas.setAttribute("height", height || 450);
 	
+	var ctx = canvas.getContext("2d");
+	
+	this.render = function(img, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight) {
+		ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight);
+	};
+	
+	this.clear = function(x, y, width, height) {
+		ctx.clearRect(x || 0, y || 0, width || canvas.width, height || canvas.height);
+	};
+	
+	this.getCanvas = function() {
+		return canvas;
+	};
+	
+	this.attach = function(panel) {
+		if (panel instanceof HTMLElement) {			
+			panel.appendChild(canvas);
+		}
+	};
 };
 HVdoo.util.math.Vec2 = function(x, y) {
     var el = {
