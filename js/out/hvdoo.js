@@ -109,8 +109,8 @@ HVdoo.components.Physics = (function() {
    var controller;
    var G;
    var velY;
-   var posY;
    var isJumping;
+   var isFalling;
 
    var Physics = function(entity,  controller, options) {
       entity = entity;
@@ -118,30 +118,30 @@ HVdoo.components.Physics = (function() {
       options = options || {};
       
       G = options.gravity || 0.75;
-      MAX_VEL_Y = options.velocity_y || -12.5;
+      MAX_VEL_Y = options.velocity_y || -15;
       velY = 0;
-      posY = 0;
       isJumping = false;
+      isFalling = true;
 
       this.exec = function() {
          if (controller.isSet("SPACE")) {
-            if (!isJumping) {
+            if (!isJumping && !isFalling) {
                isJumping = true;
+               isFalling = true;
                velY = MAX_VEL_Y;
-               posY = posY = entity.getPos().get().y; 
             }
          }
 
-         if (isJumping) {
-            posY += velY;
+         if (isJumping || isFalling) {
             velY += G;
-            entity.setPos(null, posY);
+            entity.getPos().add(null, velY);
          }
 
          // TODO: Remove this when proper collision detection is in place
-         if (posY > 300) {
+         if (entity.getPos().get().y > 300) {
             entity.setPos(null, 300);
             isJumping = false;
+            isFalling = false;
          }
       };
    };

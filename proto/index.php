@@ -19,7 +19,7 @@ canvas {
 	box-shadow: 0 10px 30px #333;
 }
 </style>
-<script src="js/out/hvdoo.js"></script>
+<script src="/js/out/hvdoo.js"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@ var renderer = new HVdoo.util.graphics.Renderer2D();
 var cm = new HVdoo.components.ComponentManager();
 var hero = new HVdoo.entities.Entity(0, 50, 5, 5, cm);
 
-var heroImg = new HVdoo.components.Drawable(renderer, hero, "img/elements-icons.png", 64, 64, 40, 5, 275, 355);
+var heroImg = new HVdoo.components.Drawable(renderer, hero, "/img/elements-icons.png", 64, 64, 40, 5, 275, 355);
 hero.setSprite(heroImg);
 
 var ctr = new HVdoo.util.input.Controller();

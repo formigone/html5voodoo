@@ -11,7 +11,7 @@ handlers:
   static_dir: js
 
 - url: /proto
-  script: proto.php
+  script: proto/index.php
 
 - url: /.*
   script: index.html
