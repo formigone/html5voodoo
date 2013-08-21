@@ -6,6 +6,7 @@ HVdoo.components.Physics = (function() {
    var velY;
    var isJumping;
    var isFalling;
+   var isJumpingIntent;
 
    var Physics = function(entity,  controller, options) {
       entity = entity;
@@ -17,14 +18,20 @@ HVdoo.components.Physics = (function() {
       velY = 0;
       isJumping = false;
       isFalling = true;
+      
+      // Deactivate turbo-jumping by holding down jumping button
+      isJumpingIntent = false;
 
       this.exec = function() {
          if (controller.isSet("SPACE")) {
-            if (!isJumping && !isFalling) {
+            if (!isJumping && !isFalling && !isJumpingIntent) {
                isJumping = true;
                isFalling = true;
                velY = MAX_VEL_Y;
+               isJumpingIntent = true;
             }
+         } else {
+            isJumpingIntent = false;
          }
 
          if (isJumping || isFalling) {

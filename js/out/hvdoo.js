@@ -84,17 +84,28 @@ HVdoo.components.Movement = (function() {
 
 	var entity;
 	var controller;
+	var hor;
 	
 	var Movement = function(entity,  controller) {
 		entity = entity;
 		controller = controller;
 		
+		hor = 0;
+		
 		this.exec = function() {
 			entity.getDir().zero();
-			if (controller.isSet("UP")) entity.setDir(null, -1);
-			if (controller.isSet("DOWN")) entity.setDir(null, 1);
-			if (controller.isSet("LEFT")) entity.setDir(-1, null);
-			if (controller.isSet("RIGHT")) entity.setDir(1, null);
+			hor = 0;
+			
+//			if (controller.isSet("UP")) entity.setDir(null, -1);
+//			if (controller.isSet("DOWN")) entity.setDir(null, 1);
+			if (controller.isSet("LEFT")) {
+			   hor -= 1;
+			}
+			if (controller.isSet("RIGHT")) {
+			   hor += 1;
+			}
+		   
+		   entity.setDir(hor, null);
 
 			entity.move();
 		};
@@ -111,6 +122,7 @@ HVdoo.components.Physics = (function() {
    var velY;
    var isJumping;
    var isFalling;
+   var isJumpingIntent;
 
    var Physics = function(entity,  controller, options) {
       entity = entity;
@@ -122,14 +134,20 @@ HVdoo.components.Physics = (function() {
       velY = 0;
       isJumping = false;
       isFalling = true;
+      
+      // Deactivate turbo-jumping by holding down jumping button
+      isJumpingIntent = false;
 
       this.exec = function() {
          if (controller.isSet("SPACE")) {
-            if (!isJumping && !isFalling) {
+            if (!isJumping && !isFalling && !isJumpingIntent) {
                isJumping = true;
                isFalling = true;
                velY = MAX_VEL_Y;
+               isJumpingIntent = true;
             }
+         } else {
+            isJumpingIntent = false;
          }
 
          if (isJumping || isFalling) {
