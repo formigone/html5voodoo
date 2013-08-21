@@ -12,7 +12,7 @@
 	<property name="JS_OUT_BUILT" value="${DIST_JS_DIR}/hvdoo.js" />
 
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
-		classpath="/usr/local/google-clojure/compiler.jar" />
+		classpath="/usr/local/google-closure/compiler.jar" />
 
 	<target name="makeDef">
 		<concat destfile="${JS_OUT_DEF}">

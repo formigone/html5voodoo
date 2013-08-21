@@ -4,6 +4,9 @@ HVdoo.components.Movement = (function() {
 	var controller;
 	var hor;
 	
+	/**
+    * @constructor
+    */
 	var Movement = function(entity,  controller) {
 		entity = entity;
 		controller = controller;

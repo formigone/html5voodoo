@@ -4,10 +4,14 @@ HVdoo.components.Physics = (function() {
    var controller;
    var G;
    var velY;
+   var MAX_VEL_Y;
    var isJumping;
    var isFalling;
    var isJumpingIntent;
 
+   /**
+    * @constructor
+    */
    var Physics = function(entity,  controller, options) {
       entity = entity;
       controller = controller;
