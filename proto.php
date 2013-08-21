@@ -34,7 +34,9 @@ hero.setSprite(heroImg);
 
 var ctr = new HVdoo.util.input.Controller();
 var move = new HVdoo.components.Movement(hero, ctr);
+var phy = new HVdoo.components.Physics(hero, ctr);
 cm.set("move", move);
+cm.set("phy", phy);
 
 document.body.addEventListener("keydown", ctr.onKeyDown);
 document.body.addEventListener("keyup", ctr.onKeyUp);

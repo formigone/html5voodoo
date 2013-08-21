@@ -23,6 +23,10 @@ HVdoo.entities.Entity = function(x, y, dX, dY, componentManager) {
 		return pos;
 	};
 
+	this.setPos = function(x, y) {
+      pos.set(x, y);
+   };
+
 	this.getDir = function() {
 		return dir;
 	};

@@ -1,11 +1,301 @@
-/**
- * Copyright (c) 2013 Rodrigo Silveira. All rights reserved
- */
-var HVdoo=HVdoo||{};HVdoo.components=HVdoo.components||{};HVdoo.entities=HVdoo.entities||{};HVdoo.util=HVdoo.util||{};HVdoo.util.graphics=HVdoo.util.graphics||{};HVdoo.util.input=HVdoo.util.input||{};HVdoo.util.math=HVdoo.util.math||{};HVdoo.components.Component=function(){this.exec=function(){}};
-HVdoo.components.ComponentManager=function(){var b={},c=function(){HVdoo.components.Component.call(this);this.has=function(a){return void 0!==this.get(a)};this.set=function(a,c){b[a]=c};this.get=function(a){return b[a]};this.exec=function(){for(var a in b)b[a]instanceof HVdoo.components.Component&&b[a].exec()}};c.prototype=Object.create(HVdoo.components.Component.prototype);return c}();
-HVdoo.components.Drawable=function(){var b,c,a=0,e=0,m=0,l=0,d=function(d,g,k,h,n,p,q,r,s){b=new HVdoo.util.math.Vec2(h||64,n||64);c=new Image;c.src=k;a=p||0;e=q||0;m=r||h;l=s||n;this.exec=function(){var k=g.getPos().get(),h=b.get();d.render(c,a,e,m,l,k.x,k.y,h.x,h.y)};this.getSize=function(){return b};this.setSize=function(a){b=a}};d.prototype=Object.create(HVdoo.components.Component.prototype);return d}();
-HVdoo.components.Movement=function(){var b=function(b,a){this.exec=function(){b.getDir().zero();a.isSet("UP")&&b.setDir(null,-1);a.isSet("DOWN")&&b.setDir(null,1);a.isSet("LEFT")&&b.setDir(-1,null);a.isSet("RIGHT")&&b.setDir(1,null);b.move()}};b.prototype=Object.create(HVdoo.components.Component.prototype);return b}();
-HVdoo.entities.Entity=function(b,c,a,e,m){var l=new HVdoo.util.math.Vec2(b||0,c||0),d=new HVdoo.util.math.Vec2(0,0),f=new HVdoo.util.math.Vec2(a||5,e||5),g;this.update=function(){m.exec()};this.draw=function(){void 0!==g&&g.exec()};this.setSprite=function(a){g=a||null};this.getPos=function(){return l};this.getDir=function(){return d};this.setDir=function(a,b){d.set(a,b)};this.getVel=function(){return f};this.setVel=function(a,b){f.set(a,b)};this.move=function(){var a=d.get(),b=f.get();l.add(a.x*b.x,
-a.y*b.y)}};HVdoo.util.graphics.Renderer2D=function(b,c){var a=document.createElement("canvas");a.setAttribute("width",b||800);a.setAttribute("height",c||450);var e=a.getContext("2d");this.render=function(a,b,c,f,g,k,h,n,p){e.drawImage(a,b,c,f,g,k,h,n,p)};this.clear=function(b,c,d,f){e.clearRect(b||0,c||0,d||a.width,f||a.height)};this.getCanvas=function(){return a};this.attach=function(b){b instanceof HTMLElement&&b.appendChild(a)}};
-HVdoo.util.input.Controller=function(){var b={},c={SPACE:32,LEFT:37,UP:38,RIGHT:39,DOWN:40,A:65,S:83,D:68,F:70};this.isSet=function(a){return b[c[a]]};this.onKeyDown=function(a){b[a.keyCode]=!0};this.onKeyUp=function(a){b[a.keyCode]=!1}};
-HVdoo.util.math.Vec2=function(b,c){var a={x:b||0,y:c||0};this.add=function(b,c){a.x+=b||0;a.y+=c||0};this.subt=function(b,c){a.x-=b||0;a.y-=c||0};this.mult=function(b){a.x*=b;a.y*=b};this.normalize=function(){var b=Math.sqrt(a.x*a.x+a.y*a.y);a.x/=b;a.y/=b;return a};this.get=function(){return a};this.set=function(b,c){a.x=b||a.x;a.y=c||a.y;return a};this.zero=function(){a.x=0;a.y=0}};
+var HVdoo = HVdoo || {};
+HVdoo.components = HVdoo.components || {};
+HVdoo.entities = HVdoo.entities || {};
+HVdoo.util = HVdoo.util || {};
+HVdoo.util.graphics = HVdoo.util.graphics || {};
+HVdoo.util.input = HVdoo.util.input || {};
+HVdoo.util.math = HVdoo.util.math || {};
+HVdoo.components.Component = function() {
+	this.exec = function(){};
+}
+HVdoo.components.ComponentManager = (function() {
+	var components = {};
+	var ComponentManager = function() {
+		HVdoo.components.Component.call(this);
+
+		this.has = function(key) {
+			return this.get(key) !== undefined;
+		};
+
+		this.set = function(key, val) {
+			components[key] = val;
+		};
+
+		this.get = function(key) {
+			return components[key];
+		};
+
+		this.exec = function() {
+			for ( var c in components) {
+				if (components[c] instanceof HVdoo.components.Component) {
+					components[c].exec();
+				}
+			}
+		}
+	};
+
+	ComponentManager.prototype = Object.create(HVdoo.components.Component.prototype);
+	return ComponentManager;
+})();
+HVdoo.components.Drawable = (function() {
+
+	var renderer;
+	var entity;
+	var size;
+	var img;
+	var srcImg = {
+			x: 0,
+			y: 0,
+			width: 0,
+			height: 0
+	};
+	
+	var Drawable = function(renderer, entity,  imgPath, width, height, 
+			srcX, srcY, srcWidth, srcHeight) {
+		renderer = renderer;
+		entity = entity;
+		size = new HVdoo.util.math.Vec2(width || 64, height || 64);
+		img = new Image();
+		img.src = imgPath;
+		srcImg.x = srcX || 0;
+		srcImg.y = srcY || 0;
+		srcImg.width = srcWidth || width;
+		srcImg.height = srcHeight || height;
+		
+		this.exec = function() {
+			var pos = entity.getPos().get();
+			var s = size.get();
+			renderer.render(img, srcImg.x, srcImg.y, srcImg.width, srcImg.height, pos.x, pos.y, s.x, s.y);
+		};
+		
+		this.getSize = function() {
+			return size;
+		};
+		
+		this.setSize = function(vec2) {
+			size = vec2;
+		};
+	};
+	
+	Drawable.prototype = Object.create(HVdoo.components.Component.prototype);
+	return Drawable;
+})();
+HVdoo.components.Movement = (function() {
+
+	var entity;
+	var controller;
+	
+	var Movement = function(entity,  controller) {
+		entity = entity;
+		controller = controller;
+		
+		this.exec = function() {
+			entity.getDir().zero();
+			if (controller.isSet("UP")) entity.setDir(null, -1);
+			if (controller.isSet("DOWN")) entity.setDir(null, 1);
+			if (controller.isSet("LEFT")) entity.setDir(-1, null);
+			if (controller.isSet("RIGHT")) entity.setDir(1, null);
+
+			entity.move();
+		};
+	};
+	
+	Movement.prototype = Object.create(HVdoo.components.Component.prototype);
+	return Movement;
+})();
+HVdoo.components.Physics = (function() {
+
+   var entity;
+   var controller;
+   var G;
+   var velY;
+   var posY;
+   var isJumping;
+
+   var Physics = function(entity,  controller, options) {
+      entity = entity;
+      controller = controller;
+      options = options || {};
+      
+      G = options.gravity || 0.75;
+      MAX_VEL_Y = options.velocity_y || -12.5;
+      velY = 0;
+      posY = 0;
+      isJumping = false;
+
+      this.exec = function() {
+         if (controller.isSet("SPACE")) {
+            if (!isJumping) {
+               isJumping = true;
+               velY = MAX_VEL_Y;
+               posY = posY = entity.getPos().get().y; 
+            }
+         }
+
+         if (isJumping) {
+            posY += velY;
+            velY += G;
+            entity.setPos(null, posY);
+         }
+
+         // TODO: Remove this when proper collision detection is in place
+         if (posY > 300) {
+            entity.setPos(null, 300);
+            isJumping = false;
+         }
+      };
+   };
+
+   Physics.prototype = Object.create(HVdoo.components.Component.prototype);
+   return Physics;
+})();
+HVdoo.entities.Entity = function(x, y, dX, dY, componentManager) {
+	var pos = new HVdoo.util.math.Vec2(x || 0, y || 0);
+	var dir = new HVdoo.util.math.Vec2(0, 0);
+	var vel = new HVdoo.util.math.Vec2(dX || 5, dY || 5);
+	var sprite;
+	var components = componentManager;
+
+	this.update = function() {
+		components.exec();
+	};
+
+	this.draw = function() {
+		if (sprite !== undefined) {
+			sprite.exec();
+		}
+	};
+
+	this.setSprite = function(drawable) {
+		sprite = drawable || null;
+	};
+
+	this.getPos = function() {
+		return pos;
+	};
+
+	this.setPos = function(x, y) {
+      pos.set(x, y);
+   };
+
+	this.getDir = function() {
+		return dir;
+	};
+
+	this.setDir = function(x, y) {
+		dir.set(x, y);
+	};
+
+	this.getVel = function() {
+		return vel;
+	};
+
+	this.setVel = function(x, y) {
+		vel.set(x, y);
+	};
+
+	this.move = function() {
+		var _dir = dir.get();
+		var _vel = vel.get();
+		pos.add(_dir.x * _vel.x, _dir.y * _vel.y);
+	};
+};
+HVdoo.util.graphics.Renderer2D = function(width, height) {
+	var canvas = document.createElement("canvas");
+	canvas.setAttribute("width", width || 800);
+	canvas.setAttribute("height", height || 450);
+	
+	var ctx = canvas.getContext("2d");
+	
+	this.render = function(img, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight) {
+		ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight);
+	};
+	
+	this.clear = function(x, y, width, height) {
+		ctx.clearRect(x || 0, y || 0, width || canvas.width, height || canvas.height);
+	};
+	
+	this.getCanvas = function() {
+		return canvas;
+	};
+	
+	this.attach = function(panel) {
+		if (panel instanceof HTMLElement) {			
+			panel.appendChild(canvas);
+		}
+	};
+};
+HVdoo.util.input.Controller = function() {
+	var controller = {};
+    var keys = {
+    		SPACE: 32,
+    		LEFT: 37,
+    		UP: 38,
+    		RIGHT: 39,
+    		DOWN: 40,
+    		A: 65,
+    		S: 83,
+    		D: 68,
+    		F: 70
+    };
+
+    var set = function(key, val) {
+    	controller[key] = val;
+	};
+	
+	this.isSet = function(key) {
+		return controller[keys[key]]; 
+	};
+
+	this.onKeyDown = function(event) {
+		set(event.keyCode, true);
+	};
+	
+	this.onKeyUp = function(event) {
+		set(event.keyCode, false);
+	};
+};
+HVdoo.util.math.Vec2 = function(x, y) {
+    var el = {
+        x: (x || 0),
+        y: (y || 0)
+     };
+
+    this.add = function(x, y) {
+        el.x += (x || 0);
+        el.y += (y || 0);
+     };
+
+     this.subt = function(x, y) {
+        el.x -= (x || 0);
+        el.y -= (y || 0);
+     };
+     
+     this.mult = function(scal) {
+        el.x *= scal;
+        el.y *= scal;
+     };
+
+     this.normalize = function() {
+    	 var length = Math.sqrt(el.x * el.x + el.y * el.y);
+    	 el.x /= length;
+    	 el.y /= length;
+
+    	 return el;
+     };
+     
+     this.get = function() {
+        return el;
+     };
+
+     this.set = function(x, y) { 
+        el.x = x || el.x;
+        el.y = y || el.y;
+        return el;
+     };
+
+     this.zero = function() {
+    	 el.x = 0;
+    	 el.y = 0;
+     };
+}
