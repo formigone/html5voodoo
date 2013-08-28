@@ -1,74 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Build example" default="all" basedir=".">
+   <property name="CLOSURE_BASE_PATH" value="/usr/local/google-closure/closure-library/closure/goog" />
 	<property name="SRC_JS_DIR" value="${basedir}/js/hvdoo" />
 	<property name="DIST_JS_DIR" value="${basedir}/js/out" />
-	<property name="DIST_JS_TMP" value="${basedir}/js/out/tmp" />
 
 	<property name="COPYRIGHT" value="${SRC_JS_DIR}/__copyright.js" />
-	<property name="JS_OUT_DEF" value="${DIST_JS_TMP}/__def.js" />
-	<property name="JS_OUT_CODE" value="${DIST_JS_TMP}/__code.js" />
-	<property name="JS_OUT_LINKED" value="${DIST_JS_TMP}/__out.js" />
-	<property name="JS_OUT_PRE_BUILT" value="${DIST_JS_TMP}/__hvdoo.js" />
 	<property name="JS_OUT_BUILT" value="${DIST_JS_DIR}/hvdoo.js" />
 
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
 		classpath="/usr/local/google-closure/compiler.jar" />
 
-	<target name="makeDef">
-		<concat destfile="${JS_OUT_DEF}">
-			<fileset dir="${SRC_JS_DIR}" includes="**/__def.js" />
-		</concat>
-	</target>
-
-	<target name="makeCode">
-		<concat destfile="${JS_OUT_CODE}">
-			<fileset dir="${SRC_JS_DIR}" includes="**/*.js" excludes="**/__*.js" />
-		</concat>
-	</target>
-
-	<target name="link">
-		<concat destfile="${JS_OUT_LINKED}">
-                        <filelist dir="${DIST_JS_TMP}">
-				<file name="${JS_OUT_DEF}" />
-				<file name="${JS_OUT_CODE}" />
-			</filelist>
-		</concat>
-	</target>
-
-	<target name="linkToOut">
-		<concat destfile="${JS_OUT_BUILT}">
-			<filelist dir="${DIST_JS_TMP}">
-				<file name="${JS_OUT_DEF}" />
-				<file name="${JS_OUT_CODE}" />
-			</filelist>
-		</concat>
-	</target>
-
 	<target name="copyright">
 		<concat destfile="${JS_OUT_BUILT}">
-                        <filelist dir="${basedir}">
+			<filelist dir="${basedir}">
 				<file name="${COPYRIGHT}" />
-				<file name="${JS_OUT_PRE_BUILT}" />
+				<file name="${JS_OUT_BUILT}" />
 			</filelist>
 		</concat>
 	</target>
 
-	<target name="clojure">
-		<jscomp compilationLevel="simple" warning="verbose" debug="false"
-			output="${JS_OUT_PRE_BUILT}">
+	<target name="closureAdv">
+		<jscomp compilationLevel="advanced" warning="verbose" debug="false"
+			output="${JS_OUT_BUILT}">
 
-			<sources dir="${DIST_JS_TMP}">
-				<file name="__out.js" />
+			<sources dir="${SRC_JS_DIR}">
+				<file name="*.js" />
 			</sources>
 
 		</jscomp>
 	</target>
 
-	<target name="clean">
-		<delete dir="${DIST_JS_TMP}" />
-	</target>
+	<target name="closureSimple">
+		<path id="ui.js.fileset">
+			<fileset dir="${CLOSURE_BASE_PATH}">
+				<include name="**/*.js" />
+			</fileset>
+		</path>
 
-	<target name="all"
-		depends="makeDef, makeCode, link, clojure, copyright, clean"></target>
-	<target name="quick" depends="makeDef, makeCode, linkToOut"></target>
+		<path id="app.js.fileset">
+			<fileset dir="${SRC_JS_DIR}">
+				<include name="**/*.js" />
+			</fileset>
+			<path refid="ui.js.fileset" />
+		</path>
+
+		<jscomp compilationLevel="simple" warning="verbose" debug="false"
+			output="${JS_OUT_BUILT}">
+			<path refid="app.js.fileset" />
+		</jscomp>
+	</target>
+	
+	<target name="closureWhitespace">
+      <path id="ui.js.fileset">
+         <fileset dir="${CLOSURE_BASE_PATH}">
+            <include name="**/*.js" />
+            <exclude name="**/*_test.js" />
+         </fileset>
+      </path>
+
+      <path id="app.js.fileset">
+         <fileset dir="${SRC_JS_DIR}">
+            <include name="**/*.js" />
+         </fileset>
+         <path refid="ui.js.fileset" />
+      </path>
+
+      <jscomp compilationLevel="whitespace" warning="verbose" debug="false"
+         output="${JS_OUT_BUILT}">
+         <path refid="app.js.fileset" />
+      </jscomp>
+   </target>
+
+	<target name="all" depends="closureAdv, copyright"></target>
+	<target name="quick" depends="closureWhitespace"></target>
+	<target name="basic" depends="closureSimple"></target>
 </project>

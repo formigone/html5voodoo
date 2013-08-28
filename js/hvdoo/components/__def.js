@@ -1,1 +1,0 @@
-HVdoo.components = HVdoo.components || {};

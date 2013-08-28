@@ -1,1 +1,0 @@
-HVdoo.util = HVdoo.util || {};
