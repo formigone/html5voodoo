@@ -1,3 +1,5 @@
+goog.provide("HVdoo.components");
+
 HVdoo.components.Drawable = (function() {
 
 	var renderer;

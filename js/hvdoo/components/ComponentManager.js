@@ -1,3 +1,5 @@
+goog.provide("HVdoo.components");
+
 HVdoo.components.ComponentManager = (function() {
 	var components = {};
 	var ComponentManager = function() {

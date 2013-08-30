@@ -1,3 +1,5 @@
+goog.provide("HVdoo.components");
+
 HVdoo.components.Movement = (function() {
 
 	var entity;

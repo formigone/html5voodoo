@@ -1,3 +1,5 @@
+goog.provide("HVdoo.util.graphics");
+
 HVdoo.util.graphics.Renderer2D = function(width, height) {
 	var canvas = document.createElement("canvas");
 	canvas.setAttribute("width", width || 800);

@@ -1,3 +1,5 @@
+goog.provide("HVdoo.components");
+
 HVdoo.util.math.Vec2 = function(x, y) {
     var el = {
         x: (x || 0),

@@ -1,3 +1,5 @@
+goog.provide("HVdoo.util.input");
+
 HVdoo.util.input.Controller = function() {
 	var controller = {};
     var keys = {
