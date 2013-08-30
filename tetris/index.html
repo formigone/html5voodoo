@@ -19,12 +19,34 @@ canvas {
 
 	<script src="app.js"></script>
 	<script>
+		var block;
+		var board;
+		var canvas;
+
+		var lastFrame = 0;
+		var delta = 0;
+		var fps = 10;
+		var delay = 1000 / fps;
+
+		function run(time) {
+			delta = time - lastFrame;
+
+			if (delta >= delay) {
+				board.movePiece();
+				canvas.clear();
+				board.draw(canvas);
+				lastFrame = time;
+			}
+
+			requestAnimationFrame(run);
+		}
+
 		function main() {
-			var canvas = new Canvas(800, 500);
+			canvas = new Canvas(42 * 32, 23 * 32);
 			canvas.render(document.body);
 
-			var block = new Piece(5, 0);
-			var board = new Board();
+			block = new Piece(5, 0);
+			board = new Board(42, 23);
 			board.setPiece(block);
 
 			document.addEventListener("keydown", function(key) {
@@ -35,11 +57,7 @@ canvas {
 				KEYS[key.keyCode] = false;
 			});
 
-			(function drawGame(){
-				board.movePiece();
-				board.draw(canvas);
-				requestAnimationFrame(drawGame);
-			})();
+			run();
 		}
 
 		main();
