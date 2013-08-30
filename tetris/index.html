@@ -17,16 +17,29 @@ canvas {
 }
 </style>
 
-   <script src="app.js"></script>
+	<script src="app.js"></script>
 	<script>
 		function main() {
 			var canvas = new Canvas(800, 500);
 			canvas.render(document.body);
 
-			var block = new Piece(5, 5);
+			var block = new Piece(5, 0);
 			var board = new Board();
 			board.setPiece(block);
-			board.draw(canvas);
+
+			document.addEventListener("keydown", function(key) {
+				KEYS[key.keyCode] = true;
+			});
+
+			document.addEventListener("keyup", function(key) {
+				KEYS[key.keyCode] = false;
+			});
+
+			(function drawGame(){
+				board.movePiece();
+				board.draw(canvas);
+				requestAnimationFrame(drawGame);
+			})();
 		}
 
 		main();
