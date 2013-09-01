@@ -23,21 +23,25 @@ canvas {
 		var board;
 		var canvas;
 
-		var lastFrame = 0;
-		var delta = 0;
-		var fps = 10;
-		var delay = 1000 / fps;
-
+		var pieceStep = new Step(20);
+		var aiStep = new Step(3);
+		
 		function run(time) {
-			delta = time - lastFrame;
+			pieceStep.update(time);
+			aiStep.update(time);
 
-			if (delta >= delay) {
-				board.movePiece();
-				canvas.clear();
-				board.draw(canvas);
-				lastFrame = time;
-			}
+			if (pieceStep.isReady()) {
+            board.updatePiece();
+            pieceStep.step(time);
+         }
+			
+			if (aiStep.isReady()) {
+				board.update();
+            aiStep.step(time);
+         }
 
+			canvas.clear();
+			board.draw(canvas);
 			requestAnimationFrame(run);
 		}
 
@@ -57,7 +61,7 @@ canvas {
 				KEYS[key.keyCode] = false;
 			});
 
-			run();
+			run(0);
 		}
 
 		main();

@@ -97,14 +97,14 @@ var Board = function(cols, rows, width, height) {
 		rows : rows || 10,
 		cols : cols || 10
 	};
-this.getGrid = function() { return grid; };
+
 	var piece = void 0;
 
 	this.setPiece = function(pPiece) {
 		piece = pPiece;
 	};
 
-	this.movePiece = function() {
+	this.updatePiece = function() {
 		if (piece == null) {
 			return;
 		}
@@ -135,6 +135,19 @@ this.getGrid = function() { return grid; };
 		}
 	};
 	
+	this.update = function() {
+		if (piece == null) {
+			return;
+		}
+
+		var pos = piece.getPos();
+		var offset = piece.getOffset();
+		
+		if (pos.y + offset.y < grid.rows - 1) {
+			piece.moveBy(0, 1);
+		}
+	};
+	
 	this.draw = function(canvas) {
 		var pos = piece.getPos();
 		var size = piece.getSize();
@@ -156,4 +169,23 @@ var KEY_MAPPING = {
 	"UP_KEY" : 38,
 	"RIGHT_KEY" : 39,
 	"DOWN_KEY" : 40
+};
+
+var Step = function(fps) {
+	var FPS = parseInt(fps || 60);
+	var last = 0;
+	var delta = 0;
+	var delay = 1000 / FPS;
+
+	this.update = function(now) {
+		delta = now - last;
+	};
+
+	this.step = function(now) {
+		last = now;
+	};
+	
+	this.isReady = function() {
+		return (delta >= delay);
+	};
 };
