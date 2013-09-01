@@ -19,6 +19,9 @@ canvas {
 
 	<script src="app.js"></script>
 	<script>
+	   var CELL_WIDTH = 32;
+	   var CELL_HEIGHT = 32;
+
 		var block;
 		var board;
 		var canvas;
@@ -31,10 +34,10 @@ canvas {
 			aiStep.update(time);
 
 			if (pieceStep.isReady()) {
-            board.updatePiece();
+				board.updatePiece();
             pieceStep.step(time);
          }
-			
+
 			if (aiStep.isReady()) {
 				board.update();
             aiStep.step(time);
@@ -46,10 +49,10 @@ canvas {
 		}
 
 		function main() {
-			canvas = new Canvas(42 * 32, 23 * 32);
+			canvas = new Canvas(23 * CELL_WIDTH, 23 * CELL_HEIGHT);
 			canvas.render(document.body);
 
-			block = new Piece(5, 0);
+			block = new Piece(5, 0, genRandomShape());
 			board = new Board(42, 23);
 			board.setPiece(block);
 

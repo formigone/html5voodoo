@@ -34,30 +34,21 @@ var Canvas = function(width, height) {
 	};
 };
 
-var Piece = function(x, y, pSprite) {
+var Piece = function(x, y, pShape, pSprite) {
 	var pos = {
 		x : x || 0,
 		y : y || 0
 	};
 
-	var size = {
-		width : 3,
-		height : 3
-	};
-
-	var sprite = pSprite || genRandomSprite();
-	
-	var shape = [
-         0, 1, 0,
-         1, 1, 0
-     ];
+	var shape = pShape;
+	var sprite = pSprite || genRandomSprite(CELL_WIDTH, CELL_HEIGHT);
 
 	this.getPos = function() {
 		return pos;
 	};
 
 	this.getSize = function() {
-		return size;
+		return shape.size;
 	};
 
 	this.getShape = function() {
@@ -74,15 +65,15 @@ var Piece = function(x, y, pSprite) {
 			x: 0,
 			y: 0
 		};
-		
-		for (var i = 0, len = shape.length; i < len; i++) {
-			if (shape[i]) {
-				var x = i % size.width;
-				var y = parseInt(i / size.height);
+
+		for (var i = 0, len = shape.map.length; i < len; i++) {
+			if (shape.map[i]) {
+				var x = i % shape.size.width;
+				var y = parseInt(i / shape.size.height);
 				if (x > max.x) {
 					max.x = x;
 				}
-				
+
 				if (y > max.y) {
 					max.y = y;
 				}
@@ -118,6 +109,22 @@ var Board = function(cols, rows, width, height) {
 		piece = pPiece;
 	};
 
+	var isValidMove = function(x, y) {
+		if (x < 0) {
+			return false;
+		}
+
+		if (x > grid.cols - 2) {
+			return false;
+		}
+		
+		if (y > grid.rows - 2) {
+			return false;
+		}
+
+		return true;
+	};
+	
 	this.updatePiece = function() {
 		if (piece == null) {
 			return;
@@ -127,19 +134,19 @@ var Board = function(cols, rows, width, height) {
 		var offset = piece.getOffset();
 		
 		if (KEYS[KEY_MAPPING.LEFT_KEY]) {
-			if (pos.x > 0) {
+			if (isValidMove(pos.x - 1, pos.y)) {
 				piece.moveBy(-1, 0);
 			}
 		}
 		
 		if (KEYS[KEY_MAPPING.RIGHT_KEY]) {
-			if (pos.x + offset.x < grid.cols - 1) {
+			if (isValidMove(pos.x + offset.x, pos.y)) {
 				piece.moveBy(1, 0);
 			}
 		}
 		
 		if (KEYS[KEY_MAPPING.DOWN_KEY]) {
-			if (pos.y + offset.y < grid.rows - 1) {
+			if (isValidMove(pos.x, pos.y + offset.y)) {
 				piece.moveBy(0, 1);
 			}
 		}
@@ -157,21 +164,22 @@ var Board = function(cols, rows, width, height) {
 		var pos = piece.getPos();
 		var offset = piece.getOffset();
 		
-		if (pos.y + offset.y < grid.rows - 1) {
+		if (isValidMove(pos.x, pos.y + offset.y)) {
 			piece.moveBy(0, 1);
+		} else {
+			piece = new Piece(parseInt(Math.random() * 10), 0, genRandomShape());
 		}
 	};
 	
 	this.draw = function(canvas) {
-		var pos = piece.getPos();
-		var size = piece.getSize();
 		var shape = piece.getShape();
+		var pos = piece.getPos();
+		
+		for (var i = 0, len = shape.map.length; i < len; i++) {
+			var x = i % shape.size.width;
+			var y = parseInt(i / shape.size.width);
 
-		for (var i = 0, len = shape.length; i < len; i++) {
-			if (shape[i]) {
-				var x = i % size.width;
-				var y = parseInt(i / size.height);
-//				canvas.draw(pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height, cell.width, cell.height);
+			if (shape.map[i]) {
 				piece.render(canvas, pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height);
 			}
 		}
@@ -300,8 +308,106 @@ var MEGA_MAN_CHARACTER_OFFSET = {
     ]
 };
 
-function genRandomSprite() {
+function genRandomSprite(width, height) {
+	width = width || 32;
+	height = height || width;
+
 	var mms = MEGA_MAN_CHARACTER_OFFSET;
 	var rand = parseInt(Math.random() * mms.offsets.length);
-	return new Sprite("/tetris/Mega-Man-Character-Select-C.png", 32, 32, mms.offsets[rand].x, mms.offsets[rand].y, mms.size.width, mms.size.height);
+	return new Sprite("/tetris/Mega-Man-Character-Select-C.png", width, height, mms.offsets[rand].x, mms.offsets[rand].y, mms.size.width, mms.size.height);
+}
+
+function genRandomShape() {
+	var shapes = [
+	    {
+	    	size: {
+    			width : 4,
+    			height : 1
+	    	},
+	    	map: [
+    	        1, 1, 1, 1
+        	]
+	    },
+	    {
+	    	size: {
+    			width : 2,
+    			height : 2	
+	    	},
+	    	map: [
+    	        1, 1, 
+    	        1, 1
+        	]
+	    },
+	    {
+	    	size: {
+    			width : 3,
+    			height : 2	
+	    	},
+	    	map: [
+    	        1, 0, 0,
+    	        1, 1, 1
+        	]
+	    },
+	    {
+	    	size: {
+    			width : 3,
+    			height : 2	
+	    	},
+	    	map: [
+    	        0, 0, 1,
+    	        1, 1, 1
+        	]
+	    },
+	    {
+	    	size: {
+    			width : 3,
+    			height : 2	
+	    	},
+	    	map: [
+    	        0, 1, 0,
+    	        1, 1, 1
+        	]
+	    },
+	    {
+	    	size: {
+    			width : 3,
+    			height : 2	
+	    	},
+	    	map: [
+    	        0, 1, 1,
+    	        1, 1, 0
+        	]
+	    },
+	    {
+	    	size: {
+    			width : 3,
+    			height : 2	
+	    	},
+	    	map: [
+    	        1, 1, 0,
+    	        0, 1, 1
+        	]
+	    },
+	    {
+	    	size: {
+    			width : 10,
+    			height : 6	
+	    	},
+	    	map: [
+1, 1, 0, 1, 1, 0, 0, 0, 0, 0,
+0, 1, 1, 1, 0, 0, 1, 1, 0, 1,
+1, 1, 0, 1, 1, 1, 1, 0, 0, 0,
+0, 1, 0, 1, 0, 0, 0, 1, 1, 1,
+1, 1, 1, 1, 1, 1, 0, 0, 1, 0,
+0, 1, 0, 0, 0, 1, 0, 1, 0, 1
+        	]
+	    }
+    ];
+
+	var rand = parseInt(Math.random() * shapes.length);
+//console.log("Shape #" + rand + ": (" + shapes[rand].size.width + ", " + shapes[rand].size.height + ")");
+//console.log("  " + shapes[rand].map.slice(0, shapes[rand].size.width) + "\n" + 
+//		    "  " + shapes[rand].map.slice(shapes[rand].size.width));
+rand = 7;
+	return shapes[rand];
 }
