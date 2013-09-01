@@ -13,6 +13,9 @@ handlers:
 - url: /proto
   script: proto/index.php
 
+- url: /tetris
+  script: tetris/index.html
+
 - url: /.*
   script: index.html
 
