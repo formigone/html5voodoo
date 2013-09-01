@@ -21,6 +21,8 @@ canvas {
 	<script>
 	   var CELL_WIDTH = 32;
 	   var CELL_HEIGHT = 32;
+	   var GRID_WIDTH = 42;
+	   var GRID_HEIGHT = 23;
 
 		var block;
 		var board;
@@ -49,11 +51,11 @@ canvas {
 		}
 
 		function main() {
-			canvas = new Canvas(23 * CELL_WIDTH, 23 * CELL_HEIGHT);
+			canvas = new Canvas(GRID_WIDTH * CELL_WIDTH, GRID_HEIGHT * CELL_HEIGHT);
 			canvas.render(document.body);
 
-			block = new Piece(5, 0, genRandomShape());
-			board = new Board(42, 23);
+			block = new Piece(parseInt(Math.random() * (GRID_WIDTH - 6)), 0, genRandomShape());
+			board = new Board(GRID_WIDTH, GRID_HEIGHT);
 			board.setPiece(block);
 
 			document.addEventListener("keydown", function(key) {
