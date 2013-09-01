@@ -20,7 +20,7 @@ canvas {
 	margin: 25px auto;
 	display: block;
 	/*	box-shadow: inset 0 10px 150px #000; */
-	background: url("background-2.jpg") center;
+	background: url("/img/tetris/background-2.jpg") center;
 	background-size: 100% auto;
 	height: 65%;
 	-webkit-transition: all 1s;
@@ -80,7 +80,7 @@ a {
     * more information about game development.  
 	 */
 	function m(b,c){var a=n(),e={x:b||0,y:c||0},d=p();this.b=function(){return e};this.e=function(){return a};this.moveBy=function(a,d){e.x+=a||0;e.y+=d||0};this.d=function(){var d={x:0,y:0};return d={x:a.size.width-1,y:a.size.height-1}};this.a=function(a,b,e){d.a(a,b,e)}}var t={};function u(b){var c=0,a=0,e=1E3/parseInt(b||60);this.update=function(d){a=d-c};this.step=function(a){c=a};this.f=function(){return a>=e}}
-	function v(b,c,a,e){var d=w,q=x,h=new Image;h.src="/tetris/Mega-Man-Character-Select-C.png";var f=a||0,k=e||0,g=d||b,l=q||c;this.a=function(a,d,q){a.drawImage(h,f,k,g,l,d,q,b,c)}}
+	function v(b,c,a,e){var d=w,q=x,h=new Image;h.src="/img/tetris/Mega-Man-Character-Select-C.png";var f=a||0,k=e||0,g=d||b,l=q||c;this.a=function(a,d,q){a.drawImage(h,f,k,g,l,d,q,b,c)}}
 	var w=45,x=45,y=[{x:42,y:26},{x:106,y:26},{x:170,y:26},{x:233,y:26},{x:297,y:26},{x:361,y:26},{x:425,y:26},{x:489,y:26},{x:42,y:90},{x:106,y:90},{x:170,y:90},{x:233,y:90},{x:297,y:90},{x:361,y:90},{x:425,y:90},{x:489,y:90},{x:42,y:154},{x:106,y:154},{x:170,y:154},{x:233,y:154},{x:297,y:154},{x:361,y:154},{x:425,y:154},{x:489,y:154},{x:42,y:218},{x:106,y:218},{x:170,y:218},{x:233,y:218},{x:297,y:218},{x:361,y:218},{x:425,y:218},{x:489,y:218},{x:42,y:282},{x:106,y:282},{x:170,y:282},{x:233,y:282},{x:297,
 	y:282},{x:361,y:282},{x:425,y:282},{x:489,y:282},{x:42,y:346},{x:106,y:346},{x:170,y:346},{x:233,y:346},{x:297,y:346},{x:361,y:346},{x:425,y:346},{x:489,y:346},{x:42,y:346},{x:106,y:346},{x:170,y:346},{x:233,y:346},{x:297,y:346},{x:361,y:346},{x:425,y:346},{x:489,y:346}];function p(){var b=z,c=A,b=b||32,a=parseInt(Math.random()*y.length);return new v(b,c||b,y[a].x,y[a].y)}
 	function n(){var b=[{size:{width:4,height:1},map:[1,1,1,1]},{size:{width:2,height:2},map:[1,1,1,1]},{size:{width:3,height:2},map:[1,0,0,1,1,1]},{size:{width:3,height:2},map:[0,0,1,1,1,1]},{size:{width:3,height:2},map:[0,1,0,1,1,1]},{size:{width:3,height:2},map:[0,1,1,1,1,0]},{size:{width:3,height:2},map:[1,1,0,0,1,1]}];return b[parseInt(Math.random()*b.length)]}var z=32,A=32,B,C,D,E=new u(20),F=new u(3);

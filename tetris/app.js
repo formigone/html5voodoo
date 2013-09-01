@@ -340,7 +340,7 @@ function genRandomSprite(width, height) {
 
 	var mms = MEGA_MAN_CHARACTER_OFFSET;
 	var rand = parseInt(Math.random() * mms.offsets.length);
-	return new Sprite("/tetris/Mega-Man-Character-Select-C.png", width, height, mms.offsets[rand].x, mms.offsets[rand].y, mms.size.width, mms.size.height);
+	return new Sprite("/img/tetris/Mega-Man-Character-Select-C.png", width, height, mms.offsets[rand].x, mms.offsets[rand].y, mms.size.width, mms.size.height);
 }
 
 function genRandomShape() {
