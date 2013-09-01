@@ -104,6 +104,9 @@ var Board = function(cols, rows, width, height) {
 	};
 
 	var piece = void 0;
+	var rows = {};
+	// TODO: Get rid of this later, please!
+	var inactivePieces = [];
 
 	this.setPiece = function(pPiece) {
 		piece = pPiece;
@@ -164,14 +167,36 @@ var Board = function(cols, rows, width, height) {
 		if (isValidMove(pos.x, pos.y + offset.y)) {
 			piece.moveBy(0, 1);
 		} else {
+			// TODO: Implement this row thing...
+//			for (var i = 0; i < offset.y; i++) {
+//				if (!rows[pos.y + i]) {
+//					rows[pos.y + i] = [];
+//				}
+//			}
+
+			inactivePieces.push(piece);
 			piece = new Piece(parseInt(Math.random() * (grid.cols - 6)), -1, genRandomShape());
+		}
+	};
+
+	var drawInactivePiece = function(p) {
+		var shape = p.getShape();
+		var pos = p.getPos();
+
+		for (var i = 0, len = shape.map.length; i < len; i++) {
+			var x = i % shape.size.width;
+			var y = parseInt(i / shape.size.width);
+
+			if (shape.map[i]) {
+				p.render(canvas, pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height);
+			}
 		}
 	};
 	
 	this.draw = function(canvas) {
 		var shape = piece.getShape();
 		var pos = piece.getPos();
-		
+
 		for (var i = 0, len = shape.map.length; i < len; i++) {
 			var x = i % shape.size.width;
 			var y = parseInt(i / shape.size.width);
@@ -179,6 +204,10 @@ var Board = function(cols, rows, width, height) {
 			if (shape.map[i]) {
 				piece.render(canvas, pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height);
 			}
+		}
+		
+		for (i = 0, len = inactivePieces.length; i < len; i++) {
+			drawInactivePiece(inactivePieces[i]);
 		}
 	};
 };
