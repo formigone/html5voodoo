@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<body>
+	<style>
+body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	background: #ddd;
+}
+
+canvas {
+	margin: 50px auto 0;
+	display: block;
+	box-shadow: inset 0 10px 150px #000;
+	background: url("background-2.jpg") center;
+	background-size: 100% auto;
+}
+</style>
+
+	<script src="app.js"></script>
+	<script>
+	   var CELL_WIDTH = 32;
+	   var CELL_HEIGHT = 32;
+	   var GRID_WIDTH = 42;
+	   var GRID_HEIGHT = 23;
+
+		var block;
+		var board;
+		var canvas;
+
+		var pieceStep = new Step(20);
+		var aiStep = new Step(3);
+		
+		function run(time) {
+			pieceStep.update(time);
+			aiStep.update(time);
+
+			if (pieceStep.isReady()) {
+				board.updatePiece();
+            pieceStep.step(time);
+         }
+
+			if (aiStep.isReady()) {
+				board.update();
+            aiStep.step(time);
+         }
+
+			canvas.clear();
+			board.draw(canvas);
+			requestAnimationFrame(run);
+		}
+
+		function main() {
+			canvas = new Canvas(GRID_WIDTH * CELL_WIDTH, GRID_HEIGHT * CELL_HEIGHT);
+			canvas.render(document.body);
+
+			block = new Piece(parseInt(Math.random() * (GRID_WIDTH - 6)), 0, genRandomShape());
+			board = new Board(GRID_WIDTH, GRID_HEIGHT);
+			board.setPiece(block);
+
+			document.addEventListener("keydown", function(key) {
+				KEYS[key.keyCode] = true;
+			});
+
+			document.addEventListener("keyup", function(key) {
+				KEYS[key.keyCode] = false;
+			});
+
+			run(0);
+		}
+
+		main();
+	</script>
+
+</body>
+</html>

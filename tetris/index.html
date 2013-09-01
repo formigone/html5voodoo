@@ -1,77 +1,93 @@
 <!doctype html>
 <html>
-<body>
-	<style>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href='http://fonts.googleapis.com/css?family=Orbitron'
+	rel='stylesheet' type='text/css'>
+<title>Mega Man Tetris in HTML5 by Rodrigo Silveira</title>
+<style>
 body {
 	margin: 0;
 	padding: 0;
 	width: 100%;
 	height: 100%;
-	background: #ddd;
+	background: #000;
 }
 
 canvas {
-	margin: 50px auto 0;
+	margin: 25px auto;
 	display: block;
-	box-shadow: inset 0 10px 150px #000;
+	/*	box-shadow: inset 0 10px 150px #000; */
 	background: url("background-2.jpg") center;
 	background-size: 100% auto;
+	height: 65%;
+	-webkit-transition: all 1s;
+}
+
+p {
+	text-align: center;
+	color: #aaa;
+	font-family: monospace;
+}
+
+a {
+   color: #fff;
 }
 </style>
-
-	<script src="app.js"></script>
+</head>
+<body>
+	<h1 style="font-family: Orbitron; color: #0c0; text-align: center;">
+		<span style="font-size: 2em">Mega Man Tetris in HTML5</span>
+	</h1>
+	<p>
+		This HTML5 game is a demonstration of Google Closure tools and the
+		latest HTML5 APIs that lend themselves well for game development. If
+		you'd like to learn more about Closure Tools, how to make your own
+		video games, or anything those lines, come find my <a
+			href="http://www.youtube.com/easylearntutorial">YouTube channel</a>
+		or <a href="http://www.rodrigo-silveira.com">my tech blog</a>.
+	</p>
+	<p>
+		Copyright &copy; 2013 <a
+			href="https://plus.google.com/103737161295645708507/posts">Rodrigo
+			Silveira</a>. All rights reserved (except for all the Mega Man stuff, of
+		course...). Thank you Google for the awesome <a
+			href="https://developers.google.com/appengine/docs/php/">Google
+			App Engine PHP environment</a> =)
+	</p>
 	<script>
-	   var CELL_WIDTH = 32;
-	   var CELL_HEIGHT = 32;
-	   var GRID_WIDTH = 42;
-	   var GRID_HEIGHT = 23;
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-		var block;
-		var board;
-		var canvas;
+  ga('create', 'UA-20148108-3', 'html5voodoo.com');
+  ga('send', 'pageview');
 
-		var pieceStep = new Step(20);
-		var aiStep = new Step(3);
-		
-		function run(time) {
-			pieceStep.update(time);
-			aiStep.update(time);
+</script>
 
-			if (pieceStep.isReady()) {
-				board.updatePiece();
-            pieceStep.step(time);
-         }
-
-			if (aiStep.isReady()) {
-				board.update();
-            aiStep.step(time);
-         }
-
-			canvas.clear();
-			board.draw(canvas);
-			requestAnimationFrame(run);
-		}
-
-		function main() {
-			canvas = new Canvas(GRID_WIDTH * CELL_WIDTH, GRID_HEIGHT * CELL_HEIGHT);
-			canvas.render(document.body);
-
-			block = new Piece(parseInt(Math.random() * (GRID_WIDTH - 6)), 0, genRandomShape());
-			board = new Board(GRID_WIDTH, GRID_HEIGHT);
-			board.setPiece(block);
-
-			document.addEventListener("keydown", function(key) {
-				KEYS[key.keyCode] = true;
-			});
-
-			document.addEventListener("keyup", function(key) {
-				KEYS[key.keyCode] = false;
-			});
-
-			run(0);
-		}
-
-		main();
+	<script>
+	/**
+	 * Copyright (c) 2013 Rodrigo Silveira http://www.rodrigo-silveira.com
+    * All rights reserved. 
+    *
+    * Tetris, Mega Man, Nintendo, and other awesome intellectual property used in this game are 
+    * trademarked, copyrighted, etc. to their respective owners. 
+    * All code in this application came forth out of my 10 healthy fingers. 
+    * Check out my YouTube channel at http://www.youtube.com/easylearntutorial.com for
+    * more information about game development.  
+	 */
+	function m(b,c){var a=n(),e={x:b||0,y:c||0},d=p();this.b=function(){return e};this.e=function(){return a};this.moveBy=function(a,d){e.x+=a||0;e.y+=d||0};this.d=function(){var d={x:0,y:0};return d={x:a.size.width-1,y:a.size.height-1}};this.a=function(a,b,e){d.a(a,b,e)}}var t={};function u(b){var c=0,a=0,e=1E3/parseInt(b||60);this.update=function(d){a=d-c};this.step=function(a){c=a};this.f=function(){return a>=e}}
+	function v(b,c,a,e){var d=w,q=x,h=new Image;h.src="/tetris/Mega-Man-Character-Select-C.png";var f=a||0,k=e||0,g=d||b,l=q||c;this.a=function(a,d,q){a.drawImage(h,f,k,g,l,d,q,b,c)}}
+	var w=45,x=45,y=[{x:42,y:26},{x:106,y:26},{x:170,y:26},{x:233,y:26},{x:297,y:26},{x:361,y:26},{x:425,y:26},{x:489,y:26},{x:42,y:90},{x:106,y:90},{x:170,y:90},{x:233,y:90},{x:297,y:90},{x:361,y:90},{x:425,y:90},{x:489,y:90},{x:42,y:154},{x:106,y:154},{x:170,y:154},{x:233,y:154},{x:297,y:154},{x:361,y:154},{x:425,y:154},{x:489,y:154},{x:42,y:218},{x:106,y:218},{x:170,y:218},{x:233,y:218},{x:297,y:218},{x:361,y:218},{x:425,y:218},{x:489,y:218},{x:42,y:282},{x:106,y:282},{x:170,y:282},{x:233,y:282},{x:297,
+	y:282},{x:361,y:282},{x:425,y:282},{x:489,y:282},{x:42,y:346},{x:106,y:346},{x:170,y:346},{x:233,y:346},{x:297,y:346},{x:361,y:346},{x:425,y:346},{x:489,y:346},{x:42,y:346},{x:106,y:346},{x:170,y:346},{x:233,y:346},{x:297,y:346},{x:361,y:346},{x:425,y:346},{x:489,y:346}];function p(){var b=z,c=A,b=b||32,a=parseInt(Math.random()*y.length);return new v(b,c||b,y[a].x,y[a].y)}
+	function n(){var b=[{size:{width:4,height:1},map:[1,1,1,1]},{size:{width:2,height:2},map:[1,1,1,1]},{size:{width:3,height:2},map:[1,0,0,1,1,1]},{size:{width:3,height:2},map:[0,0,1,1,1,1]},{size:{width:3,height:2},map:[0,1,0,1,1,1]},{size:{width:3,height:2},map:[0,1,1,1,1,0]},{size:{width:3,height:2},map:[1,1,0,0,1,1]}];return b[parseInt(Math.random()*b.length)]}var z=32,A=32,B,C,D,E=new u(20),F=new u(3);
+	function G(b){E.update(b);F.update(b);E.f()&&(C.h(),E.step(b));F.f()&&(C.update(),F.step(b));D.clear();C.c(D);requestAnimationFrame(G)}D=new function(){var b=42*z,c=23*A,a=document.createElement("canvas");a.width=b;a.height=c;var e=a.getContext("2d");this.a=function(d){d.appendChild(a)};this.clear=function(){e.clearRect(0,0,a.width,a.height)};this.c=function(a,b,c,f){e.fillRect(a,b,c,f)};this.drawImage=function(a,b,c,f,k,g,l,r,s){e.drawImage(a,b,c,f,k,g,l,r,s)}};D.a(document.body);
+	B=new m(parseInt(36*Math.random()),0);
+	C=new function(){function b(a,b){return 0>a||a>c.cols-2||b>c.rows-2?!1:!0}var c={rows:23,cols:42},a=void 0,e=[];this.g=function(){a=B};this.h=function(){if(null!=a){var d=a.b(),e=a.d();t[37]&&b(d.x-1,d.y)&&a.moveBy(-1,0);t[39]&&(console.log(d,e,c),b(d.x+e.x,d.y)&&a.moveBy(1,0));t[40]&&b(d.x,d.y+e.y)&&a.moveBy(0,1)}};this.update=function(){if(null!=a){var d=a.b();b(d.x,d.y+a.d().y)?a.moveBy(0,1):(e.push(a),a=new m(parseInt(Math.random()*(c.cols-6)),-1))}};this.c=function(b){for(var c=a.e(),h=a.b(),
+	f=0,k=c.map.length;f<k;f++){var g=f%c.size.width,l=parseInt(f/c.size.width);c.map[f]&&a.a(b,32*h.x+32*g,32*h.y+32*l)}f=0;for(k=e.length;f<k;f++)for(b=e[f],c=b.e(),h=b.b(),g=0,l=c.map.length;g<l;g++){var r=g%c.size.width,s=parseInt(g/c.size.width);c.map[g]&&b.a(D,32*h.x+32*r,32*h.y+32*s)}}};C.g();document.addEventListener("keydown",function(b){t[b.keyCode]=!0});document.addEventListener("keyup",function(b){t[b.keyCode]=!1});G(0);
 	</script>
 
 </body>
