@@ -24,13 +24,17 @@ var Canvas = function(width, height) {
 	this.draw = function(x, y, width, height) {
 		ctx.fillRect(x, y, width, height);
 	};
+	
+	this.drawImage = function(img, srcX, srcY, srcWidth, srcHeight, x, y, width, height) {
+		ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, x, y, width, height);
+	};
 
 	this.getRenderer = function() {
 		return ctx;
 	};
 };
 
-var Piece = function(x, y) {
+var Piece = function(x, y, pSprite) {
 	var pos = {
 		x : x || 0,
 		y : y || 0
@@ -41,6 +45,8 @@ var Piece = function(x, y) {
 		height : 3
 	};
 
+	var sprite = pSprite || genRandomSprite();
+	
 	var shape = [
          0, 1, 0,
          1, 1, 0
@@ -84,6 +90,14 @@ var Piece = function(x, y) {
 		}
 		
 		return max;
+	};
+	
+	this.getSprite = function() {
+		return sprite;
+	};
+
+	this.render = function(canvas, x, y) {
+		sprite.render(canvas, x, y);
 	};
 };
 
@@ -157,7 +171,8 @@ var Board = function(cols, rows, width, height) {
 			if (shape[i]) {
 				var x = i % size.width;
 				var y = parseInt(i / size.height);
-				canvas.draw(pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height, cell.width, cell.height);
+//				canvas.draw(pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height, cell.width, cell.height);
+				piece.render(canvas, pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height);
 			}
 		}
 	};
@@ -189,3 +204,104 @@ var Step = function(fps) {
 		return (delta >= delay);
 	};
 };
+
+var Sprite = function(img, width, height, srcX, srcY, srcWidth, srcHeight) {
+	var el = new Image();
+	el.src = img;
+
+	var size = {
+		width: width,
+		height: height
+	};
+	
+	var meta = {
+		x: srcX || 0,
+		y: srcY || 0,
+		width: srcWidth || width,
+		height: srcHeight || height
+	};
+	
+	this.render = function(canvas, x, y) {
+		canvas.drawImage(el, meta.x, meta.y, meta.width, meta.height, x, y, size.width, size.height);
+	};
+};
+
+var MEGA_MAN_CHARACTER_OFFSET = {
+	size: {
+		width: 45,
+		height: 45
+	},
+	offsets: [
+        {x: 42, y: 26},
+        {x: 106, y: 26},
+        {x: 170, y: 26},
+        {x: 233, y: 26},
+        {x: 297, y: 26},
+        {x: 361, y: 26},
+        {x: 425, y: 26},
+        {x: 489, y: 26},
+
+        {x: 42, y: 90},
+        {x: 106, y: 90},
+        {x: 170, y: 90},
+        {x: 233, y: 90},
+        {x: 297, y: 90},
+        {x: 361, y: 90},
+        {x: 425, y: 90},
+        {x: 489, y: 90},
+
+        {x: 42, y: 154},
+        {x: 106, y: 154},
+        {x: 170, y: 154},
+        {x: 233, y: 154},
+        {x: 297, y: 154},
+        {x: 361, y: 154},
+        {x: 425, y: 154},
+        {x: 489, y: 154},
+
+        {x: 42, y: 218},
+        {x: 106, y: 218},
+        {x: 170, y: 218},
+        {x: 233, y: 218},
+        {x: 297, y: 218},
+        {x: 361, y: 218},
+        {x: 425, y: 218},
+        {x: 489, y: 218},
+
+        {x: 42, y: 282},
+        {x: 106, y: 282},
+        {x: 170, y: 282},
+        {x: 233, y: 282},
+        {x: 297, y: 282},
+        {x: 361, y: 282},
+        {x: 425, y: 282},
+        {x: 489, y: 282},
+
+        {x: 42, y: 346},
+        {x: 106, y: 346},
+        {x: 170, y: 346},
+        {x: 233, y: 346},
+        {x: 297, y: 346},
+        {x: 361, y: 346},
+        {x: 425, y: 346},
+        {x: 489, y: 346},
+        
+        {x: 42, y: 346},
+        {x: 106, y: 346},
+        {x: 170, y: 346},
+        {x: 233, y: 346},
+        {x: 297, y: 346},
+        {x: 361, y: 346},
+        {x: 425, y: 346},
+        {x: 489, y: 346},
+        ],
+	character: [
+        "N/A"
+    ]
+};
+
+function genRandomSprite() {
+	var mms = MEGA_MAN_CHARACTER_OFFSET;
+	var rand = parseInt(Math.random() * mms.offsets.length);
+	return new Sprite("/tetris/Mega-Man-Character-Select-C.png", 32, 32, mms.offsets[rand].x, mms.offsets[rand].y, mms.size.width, mms.size.height);
+}
