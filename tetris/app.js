@@ -84,39 +84,40 @@ var Board = function(cols, rows, width, height, pPiece) {
 		cols : cols || 10
 	};
 
+	var needsNewPiece = false;
 	var piece = pPiece;
+	var inactivePieces = [];
 	var filledCells = [];
 
 	for (var i = 0, len = grid.rows * grid.cols; i < len; i++) {
 		filledCells[i] = false;
 	}
 
-	var inactivePieces = [];
-
 	var isValidMove = function(x, y) {
-
-		if (x < 0) {
-			return false;
-		}
-
-		if (x > grid.cols - 2) {
-			return false;
-		}
 		
-		if (y > grid.rows - 1) {
-			return false;
-		}
-
 		var shape = piece.getShape();
 		var _map = shape.map;
 		var _w = shape.size.width;
+		var _h = shape.size.height;
 		var _y;
 		var _p;
 		var _offset;
 		var _vOffset = shape.size.height > 1 ? 1 : 0;
 
+		if (x < 0) {
+			return false;
+		}
+
+		if (x + _w > grid.cols) {
+			return false;
+		}
+		
+		if (y + _h > grid.rows) {
+			return false;
+		}
+
 		for (var i = 0, len = _map.length; i < len; i++) {
-			_y = parseInt(i / _w);
+			_y = parseInt(i / _w) + 1;
 			_offset = (y + _y - _vOffset) * grid.cols + x;
 			_p = _offset + (i % _w);
 
@@ -130,13 +131,14 @@ var Board = function(cols, rows, width, height, pPiece) {
 
 	this.updatePiece = function() {
 		var pos = piece.getPos();
-		var shape = piece.getShape();
-		var _size = shape.size;
 
 		if (KEYS[KEY_MAPPING.DOWN_KEY]) {
-			if (isValidMove(pos.x, pos.y + _size.height)) {
+			if (isValidMove(pos.x, pos.y + 1)) {
 				piece.moveBy(0, 1);
 				pos = piece.getPos();
+			} else {
+				needsNewPiece = true;
+				return;
 			}
 		}
 
@@ -148,7 +150,7 @@ var Board = function(cols, rows, width, height, pPiece) {
 		}
 
 		if (KEYS[KEY_MAPPING.RIGHT_KEY]) {
-			if (isValidMove(pos.x + _size.width - 1, pos.y)) {
+			if (isValidMove(pos.x + 1, pos.y)) {
 				piece.moveBy(1, 0);
 			}
 		}
@@ -159,10 +161,7 @@ var Board = function(cols, rows, width, height, pPiece) {
 		var shape = piece.getShape();
 		var _size = shape.size;
 
-		if (isValidMove(pos.x, pos.y + _size.height)) {
-			piece.moveBy(0, 1);
-			pos = piece.getPos();
-		} else {
+		if (needsNewPiece) {
 			var _y;
 			var _offset;
 			var _p;
@@ -180,7 +179,15 @@ var Board = function(cols, rows, width, height, pPiece) {
 				__x = 1;
 			}
 			piece = new Piece(__x, -1, genRandomShape());
+			needsNewPiece = false;
 		}
+
+//		if (isValidMove(pos.x, pos.y + _size.height)) {
+//			piece.moveBy(0, 1);
+//			pos = piece.getPos();
+//		} else {
+//			needsNewPiece = true;
+//		}
 	};
 
 	var drawInactivePiece = function(p) {
