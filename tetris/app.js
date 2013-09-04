@@ -63,30 +63,7 @@ var Piece = function(x, y, pShape, pSprite) {
 	this.isOn = function(i) {
 		return shape.map[i] > 0;
 	};
-	
-	this.getOffset = function() {
-		var max = {
-			x: 0,
-			y: 0
-		};
 
-//		for (var i = 0, len = shape.map.length; i < len; i++) {
-//			if (shape.map[i]) {
-//				var x = i % shape.size.width;
-//				var y = parseInt(i / shape.size.width);
-//				if (x > max.x) {
-//					max.x = x;
-//				}
-//
-//				if (y > max.y) {
-//					max.y = y;
-//				}
-//			}
-//		}
-max = {x: shape.size.width, y: shape.size.height};
-		return max;
-	};
-	
 	this.getSprite = function() {
 		return sprite;
 	};
@@ -96,7 +73,7 @@ max = {x: shape.size.width, y: shape.size.height};
 	};
 };
 
-var Board = function(cols, rows, width, height) {
+var Board = function(cols, rows, width, height, pPiece) {
 	var cell = {
 		width : width || 32,
 		height : height || width || 32
@@ -107,19 +84,14 @@ var Board = function(cols, rows, width, height) {
 		cols : cols || 10
 	};
 
-	var piece = void 0;
+	var piece = pPiece;
 	var filledCells = [];
-	
+
 	for (var i = 0, len = grid.rows * grid.cols; i < len; i++) {
 		filledCells[i] = false;
 	}
 
-	// TODO: Get rid of this later, please!
 	var inactivePieces = [];
-
-	this.setPiece = function(pPiece) {
-		piece = pPiece;
-	};
 
 	var isValidMove = function(x, y) {
 
@@ -186,7 +158,7 @@ var Board = function(cols, rows, width, height) {
 		var pos = piece.getPos();
 		var shape = piece.getShape();
 		var _size = shape.size;
-		
+
 		if (isValidMove(pos.x, pos.y + _size.height)) {
 			piece.moveBy(0, 1);
 			pos = piece.getPos();

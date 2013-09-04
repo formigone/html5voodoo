@@ -21,16 +21,16 @@ canvas {
 
 	<script src="app.js"></script>
 	<script>
-	   var CELL_WIDTH = 32;
-	   var CELL_HEIGHT = 32;
-	   var GRID_WIDTH = 42;
-	   var GRID_HEIGHT = 23;
+	   var CELL_WIDTH = 64;
+	   var CELL_HEIGHT = 64;
+	   var GRID_WIDTH = 22;
+	   var GRID_HEIGHT = 11;
 
 		var block;
 		var board;
 		var canvas;
 
-		var pieceStep = new Step(5);
+		var pieceStep = new Step(20);
 		var aiStep = new Step(5);
 
 		function run(time) {
@@ -60,9 +60,9 @@ canvas {
          if (__x < 0) {
             __x = 1;
          }
+
 			block = new Piece(__x, 0, genRandomShape());
-			board = new Board(GRID_WIDTH, GRID_HEIGHT);
-			board.setPiece(block);
+			board = new Board(GRID_WIDTH, GRID_HEIGHT, CELL_WIDTH, CELL_HEIGHT, block);
 
 			document.addEventListener("keydown", function(key) {
 				KEYS[key.keyCode] = true;
