@@ -30,7 +30,7 @@ canvas {
 		var board;
 		var canvas;
 
-		var pieceStep = new Step(20);
+		var pieceStep = new Step(5);
 		var aiStep = new Step(5);
 
 		function run(time) {
@@ -38,13 +38,13 @@ canvas {
 			aiStep.update(time);
 
 			if (pieceStep.isReady()) {
-            pieceStep.step(time);
 				board.updatePiece();
+            pieceStep.step(time);
          }
 
 			if (aiStep.isReady()) {
-            aiStep.step(time);
 			   board.update();
+            aiStep.step(time);
          }
 
 			canvas.clear();
@@ -56,7 +56,11 @@ canvas {
 			canvas = new Canvas(GRID_WIDTH * CELL_WIDTH, GRID_HEIGHT * CELL_HEIGHT);
 			canvas.render(document.body);
 
-			block = new Piece(parseInt(Math.random() * (GRID_WIDTH - 6)), 0, genRandomShape());
+			var __x = parseInt(Math.random() * (GRID_WIDTH - 6));
+         if (__x < 0) {
+            __x = 1;
+         }
+			block = new Piece(__x, 0, genRandomShape());
 			board = new Board(GRID_WIDTH, GRID_HEIGHT);
 			board.setPiece(block);
 

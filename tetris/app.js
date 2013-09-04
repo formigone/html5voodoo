@@ -148,26 +148,30 @@ var Board = function(cols, rows, width, height) {
 			_offset = (y + _y - _vOffset) * grid.cols + x;
 			_p = _offset + (i % _w);
 
-			if (filledCells[_p] && _map[i] > 0) {
+			if (filledCells[_p] && _map[i] == 1) {
 				return false;
 			}
 		}
 
 		return true;
 	};
-	
-	this.updatePiece = function() {
-		if (piece == null) {
-			return;
-		}
 
+	this.updatePiece = function() {
 		var pos = piece.getPos();
 		var shape = piece.getShape();
 		var _size = shape.size;
 
+		if (KEYS[KEY_MAPPING.DOWN_KEY]) {
+			if (isValidMove(pos.x, pos.y + _size.height)) {
+				piece.moveBy(0, 1);
+				pos = piece.getPos();
+			}
+		}
+
 		if (KEYS[KEY_MAPPING.LEFT_KEY]) {
 			if (isValidMove(pos.x - 1, pos.y)) {
 				piece.moveBy(-1, 0);
+				pos = piece.getPos();
 			}
 		}
 
@@ -176,27 +180,17 @@ var Board = function(cols, rows, width, height) {
 				piece.moveBy(1, 0);
 			}
 		}
-
-		if (KEYS[KEY_MAPPING.DOWN_KEY]) {
-			if (isValidMove(pos.x, pos.y + _size.height)) {
-				piece.moveBy(0, 1);
-			}
-		}
 	};
 	
 	this.update = function() {
-		if (piece == null) {
-			return;
-		}
-
 		var pos = piece.getPos();
 		var shape = piece.getShape();
 		var _size = shape.size;
 		
 		if (isValidMove(pos.x, pos.y + _size.height)) {
 			piece.moveBy(0, 1);
+			pos = piece.getPos();
 		} else {
-
 			var _y;
 			var _offset;
 			var _p;
@@ -209,7 +203,11 @@ var Board = function(cols, rows, width, height) {
 			}
 
 			inactivePieces.push(piece);
-			piece = new Piece(parseInt(Math.random() * (grid.cols - 6)), -3, genRandomShape());
+			var __x = parseInt(Math.random() * (grid.cols - 6));
+			if (__x < 0) {
+				__x = 1;
+			}
+			piece = new Piece(__x, -1, genRandomShape());
 		}
 	};
 
@@ -454,7 +452,7 @@ function genRandomShape() {
     ];
 
 	var rand = parseInt(Math.random() * shapes.length);
-//rand = 3;
+rand = 1;
 //console.log("Shape #" + rand + ": (" + shapes[rand].size.width + ", " + shapes[rand].size.height + ")");
 //console.log("  " + shapes[rand].map.slice(0, shapes[rand].size.width) + "\n" + 
 //		    "  " + shapes[rand].map.slice(shapes[rand].size.width));
