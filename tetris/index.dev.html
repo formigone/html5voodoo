@@ -31,20 +31,20 @@ canvas {
 		var canvas;
 
 		var pieceStep = new Step(20);
-		var aiStep = new Step(3);
-		
+		var aiStep = new Step(5);
+
 		function run(time) {
 			pieceStep.update(time);
 			aiStep.update(time);
 
 			if (pieceStep.isReady()) {
-				board.updatePiece();
             pieceStep.step(time);
+				board.updatePiece();
          }
 
 			if (aiStep.isReady()) {
-				board.update();
             aiStep.step(time);
+			   board.update();
          }
 
 			canvas.clear();
@@ -76,3 +76,49 @@ canvas {
 
 </body>
 </html>
+<script language="thought/x-mind">
+x = i % shape.size.width;
+y = parseInt(i / shape.size.width);
+
+p.render(pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height);
+
+
+(0,0)    (4,0)
+  [ ][ ][ ][ ][ ]   0 1 2 3 4
+  [ ][ ][ ][ ][ ]   5 6 7 8 9
+  [ ][ ][ ][ ][ ]   0 1 2 3 4
+  [ ][ ][X][ ][ ]   5 6 7 8 9
+  [X][X][X][ ][ ]   0 1 2 3 4
+(0,4)    (4,4)
+
+(0,3) : (3x2) @
+(15), (16), (17),
+(20), (21), (22) $$
+
+_offset = y * grid.width + x;
+
+for all:
+
+_p = _offset + (i * _y) + (i % _w)
+
+end
+
+_x = i % shape.size.width;
+_y = parseInt(i / shape.size.width);
+0 1 2 3 4 5
+0 0 0 1 1 1
+
+(_y + y) * grid.cols + i
+3 * 5 + 0 = 15
+
+3 * 5 + 0 = 15
+3 * 5 + 1 = 16
+3 * 5 + 2 = 17
+
+3 * 5 + 0 = 15
+
+4 * 5 + 0 = 20
+4 * 5 + 1 = 21
+4 * 5 + 2 = 22
+
+</script>

@@ -60,6 +60,10 @@ var Piece = function(x, y, pShape, pSprite) {
 		pos.y += y || 0;
 	};
 
+	this.isOn = function(i) {
+		return shape.map[i] > 0;
+	};
+	
 	this.getOffset = function() {
 		var max = {
 			x: 0,
@@ -79,7 +83,7 @@ var Piece = function(x, y, pShape, pSprite) {
 //				}
 //			}
 //		}
-max = {x: shape.size.width - 1, y: shape.size.height - 1};
+max = {x: shape.size.width, y: shape.size.height};
 		return max;
 	};
 	
@@ -104,7 +108,12 @@ var Board = function(cols, rows, width, height) {
 	};
 
 	var piece = void 0;
-	var rows = {};
+	var filledCells = [];
+	
+	for (var i = 0, len = grid.rows * grid.cols; i < len; i++) {
+		filledCells[i] = false;
+	}
+
 	// TODO: Get rid of this later, please!
 	var inactivePieces = [];
 
@@ -113,6 +122,7 @@ var Board = function(cols, rows, width, height) {
 	};
 
 	var isValidMove = function(x, y) {
+
 		if (x < 0) {
 			return false;
 		}
@@ -121,8 +131,26 @@ var Board = function(cols, rows, width, height) {
 			return false;
 		}
 		
-		if (y > grid.rows - 2) {
+		if (y > grid.rows - 1) {
 			return false;
+		}
+
+		var shape = piece.getShape();
+		var _map = shape.map;
+		var _w = shape.size.width;
+		var _y;
+		var _p;
+		var _offset;
+		var _vOffset = shape.size.height > 1 ? 1 : 0;
+
+		for (var i = 0, len = _map.length; i < len; i++) {
+			_y = parseInt(i / _w);
+			_offset = (y + _y - _vOffset) * grid.cols + x;
+			_p = _offset + (i % _w);
+
+			if (filledCells[_p] && _map[i] > 0) {
+				return false;
+			}
 		}
 
 		return true;
@@ -134,23 +162,23 @@ var Board = function(cols, rows, width, height) {
 		}
 
 		var pos = piece.getPos();
-		var offset = piece.getOffset();
-		
+		var shape = piece.getShape();
+		var _size = shape.size;
+
 		if (KEYS[KEY_MAPPING.LEFT_KEY]) {
 			if (isValidMove(pos.x - 1, pos.y)) {
 				piece.moveBy(-1, 0);
 			}
 		}
-		
+
 		if (KEYS[KEY_MAPPING.RIGHT_KEY]) {
-			console.log(pos, offset, grid);
-			if (isValidMove(pos.x + offset.x, pos.y)) {
+			if (isValidMove(pos.x + _size.width - 1, pos.y)) {
 				piece.moveBy(1, 0);
 			}
 		}
-		
+
 		if (KEYS[KEY_MAPPING.DOWN_KEY]) {
-			if (isValidMove(pos.x, pos.y + offset.y)) {
+			if (isValidMove(pos.x, pos.y + _size.height)) {
 				piece.moveBy(0, 1);
 			}
 		}
@@ -162,30 +190,38 @@ var Board = function(cols, rows, width, height) {
 		}
 
 		var pos = piece.getPos();
-		var offset = piece.getOffset();
+		var shape = piece.getShape();
+		var _size = shape.size;
 		
-		if (isValidMove(pos.x, pos.y + offset.y)) {
+		if (isValidMove(pos.x, pos.y + _size.height)) {
 			piece.moveBy(0, 1);
 		} else {
-			// TODO: Implement this row thing...
-//			for (var i = 0; i < offset.y; i++) {
-//				if (!rows[pos.y + i]) {
-//					rows[pos.y + i] = [];
-//				}
-//			}
+
+			var _y;
+			var _offset;
+			var _p;
+			
+			for (var i = 0, len = shape.map.length; i < len; i++) {
+				_y = parseInt(i / _size.width);
+				_offset = (pos.y + _y) * grid.cols + pos.x;
+				_p = _offset + (i % _size.width);
+				filledCells[_p] = Boolean(shape.map[i]);
+			}
 
 			inactivePieces.push(piece);
-			piece = new Piece(parseInt(Math.random() * (grid.cols - 6)), -1, genRandomShape());
+			piece = new Piece(parseInt(Math.random() * (grid.cols - 6)), -3, genRandomShape());
 		}
 	};
 
 	var drawInactivePiece = function(p) {
 		var shape = p.getShape();
 		var pos = p.getPos();
+		var x;
+		var y;
 
 		for (var i = 0, len = shape.map.length; i < len; i++) {
-			var x = i % shape.size.width;
-			var y = parseInt(i / shape.size.width);
+			x = i % shape.size.width;
+			y = parseInt(i / shape.size.width);
 
 			if (shape.map[i]) {
 				p.render(canvas, pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height);
@@ -345,6 +381,7 @@ function genRandomSprite(width, height) {
 
 function genRandomShape() {
 	var shapes = [
+//{ size: { width : 4, height : 1 }, map: [ 1, 0, 1, 1 ] },
 	    {
 	    	size: {
     			width : 4,
@@ -417,6 +454,7 @@ function genRandomShape() {
     ];
 
 	var rand = parseInt(Math.random() * shapes.length);
+//rand = 3;
 //console.log("Shape #" + rand + ": (" + shapes[rand].size.width + ", " + shapes[rand].size.height + ")");
 //console.log("  " + shapes[rand].map.slice(0, shapes[rand].size.width) + "\n" + 
 //		    "  " + shapes[rand].map.slice(shapes[rand].size.width));
