@@ -34,7 +34,7 @@ hvdoo.tetris.Board = function(cols, rows, width, height, pPiece, pInput) {
         filledCells[i] = false;
     }
 
-    var isValidMove = function(x, y) {
+    var __isValidMove = function(x, y) {
 
         var shape = piece.getShape();
         var _map = shape.map;
@@ -74,7 +74,7 @@ hvdoo.tetris.Board = function(cols, rows, width, height, pPiece, pInput) {
         var pos = piece.getPos();
 
         if (input.isPressed(input.KEY_MAPPING.DOWN_KEY)) {
-            if (isValidMove(pos.x, pos.y + 1)) {
+            if (this.isValidMove(piece, pos.x, pos.y + 1, grid, filledCells)) {
                 piece.moveBy(0, 1);
                 pos = piece.getPos();
             } else {
@@ -84,14 +84,14 @@ hvdoo.tetris.Board = function(cols, rows, width, height, pPiece, pInput) {
         }
 
         if (input.isPressed(input.KEY_MAPPING.LEFT_KEY)) {
-            if (isValidMove(pos.x - 1, pos.y)) {
+            if (this.isValidMove(piece, pos.x - 1, pos.y, grid, filledCells)) {
                 piece.moveBy(-1, 0);
                 pos = piece.getPos();
             }
         }
 
         if (input.isPressed(input.KEY_MAPPING.RIGHT_KEY)) {
-            if (isValidMove(pos.x + 1, pos.y)) {
+            if (this.isValidMove(piece, pos.x + 1, pos.y, grid, filledCells)) {
                 piece.moveBy(1, 0);
             }
         }
@@ -160,4 +160,39 @@ hvdoo.tetris.Board = function(cols, rows, width, height, pPiece, pInput) {
             drawInactivePiece(inactivePieces[i]);
         }
     };
+};
+
+hvdoo.tetris.Board.prototype.isValidMove = function(piece, x, y, grid, filledCells) {
+    var shape = piece.getShape();
+    var _map = shape.map;
+    var _w = shape.size.width;
+    var _h = shape.size.height;
+    var _y;
+    var _p;
+    var _offset;
+    var _vOffset = shape.size.height > 1 ? 1 : 0;
+
+    if (x < 0) {
+        return false;
+    }
+
+    if (x + _w > grid.cols) {
+        return false;
+    }
+
+    if (y + _h > grid.rows) {
+        return false;
+    }
+
+    for (var i = 0, len = _map.length; i < len; i++) {
+        _y = parseInt(i / _w) + 1;
+        _offset = (y + _y - _vOffset) * grid.cols + x;
+        _p = _offset + (i % _w);
+
+        if (filledCells[_p] && _map[i] == 1) {
+            return false;
+        }
+    }
+
+    return true;
 };
