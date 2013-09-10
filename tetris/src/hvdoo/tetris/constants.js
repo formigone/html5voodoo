@@ -1,10 +1,5 @@
 goog.provide("hvdoo.tetris.constants");
 
-hvdoo.tetris.constants.CELL_WIDTH = 32;
-hvdoo.tetris.constants.CELL_HEIGHT = 32;
-hvdoo.tetris.constants.GRID_COLS = 16;
-hvdoo.tetris.constants.GRID_ROWS = 23;
-
 hvdoo.tetris.constants.MEGA_MAN_CHARACTER_OFFSET = {
 	size: {
 		width: 45,
@@ -72,7 +67,7 @@ hvdoo.tetris.constants.MEGA_MAN_CHARACTER_OFFSET = {
 	    {x: 297, y: 346},
 	    {x: 361, y: 346},
 	    {x: 425, y: 346},
-	    {x: 489, y: 346},
+	    {x: 489, y: 346}
     ],
 	character: [
 	    "N/A"
