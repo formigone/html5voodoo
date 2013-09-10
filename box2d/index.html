@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Box2D</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+            body, html {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background: #ddd;
+                overflow: hidden;
+            }
+            
+            canvas {
+                display: block;
+                margin: 25px auto;
+                box-shadow: 0 10px 30px #333;
+                position: absolute;
+            }
+        </style>
+    </head>
+    <body>
+
+<script src="/lib/box2d/box2d.js"></script>
+<script>
+
+var Rect = function(x, y, w, h) {
+    this.x = x || 0;
+    this.y = y || 0;
+    this.width = (w * 0.5) || 10;
+    this.height = (h * 0.5) || 10;
+};
+
+var Circle = function(x, y, r) {
+    this.radius = r || 10;
+    this.maxYVel = 5;
+    
+    this.fixDef = new b2FixtureDef();
+    this.fixDef.density = 0.25;
+//    this.fixDef.friction = 500;
+//    this.fixDef.restitution = 0.1;
+    this.fixDef.shape = new b2CircleShape();
+    this.fixDef.shape.SetRadius(this.radius);
+
+    this.bodyDef = new b2BodyDef();
+    this.bodyDef.type = b2Body.b2_dynamicBody;
+    this.bodyDef.position.x = x / WORLD_SCALE;
+    this.bodyDef.position.y = y / WORLD_SCALE;
+};
+
+var Wall = function(x, y, w, h) {
+    this.width = w || 10;
+    this.height = h || 10;
+
+    this.fixDef = new b2FixtureDef();
+    this.fixDef.density = 1;
+    this.fixDef.friction = 100.0;
+    this.fixDef.restitution = 0.0;
+    this.fixDef.shape = new b2PolygonShape();
+    this.fixDef.shape.SetAsBox(this.width * 0.5 / WORLD_SCALE, this.height * 0.5 / WORLD_SCALE);
+
+    this.bodyDef = new b2BodyDef();
+    this.bodyDef.type = b2Body.b2_staticBody;
+    this.bodyDef.position.x = x / WORLD_SCALE;
+    this.bodyDef.position.y = y / WORLD_SCALE;
+};
+
+var TICK = 32/1000;
+var lastFrame = 0;
+var delta = 0;
+var WORLD_SCALE = 32;
+
+var keys = {};
+
+function main() {
+    var canvas = document.createElement("canvas");
+    canvas.width = 900;
+    canvas.height = 600;
+    var ctx = canvas.getContext("2d");
+    var img = new Image();
+    img.src = "mushroom-2.jpg";
+
+    var canvasDeb = document.createElement("canvas");
+    canvasDeb.width = canvas.width;
+    canvasDeb.height = canvas.height;
+    var ctxDeb = canvas.getContext("2d");
+    
+    document.body.appendChild(canvasDeb);
+    document.body.appendChild(canvas);
+
+    var world = new b2World(new b2Vec2(0, -10), true);
+
+    var floor = new Wall(canvas.width / 2, 10, 900, 20);
+    world.CreateBody(floor.bodyDef).CreateFixture(floor.fixDef);
+    
+    var floor3 = new Wall(canvas.width / 2, 600, 900, 20);
+    world.CreateBody(floor3.bodyDef).CreateFixture(floor3.fixDef);
+    
+    var floor2 = new Wall(canvas.width / 2, 500, 200, 20);
+    world.CreateBody(floor2.bodyDef).CreateFixture(floor2.fixDef);
+    
+    var floor4 = new Wall(canvas.width / 4, 200, 200, 10);
+    world.CreateBody(floor4.bodyDef).CreateFixture(floor4.fixDef);
+    
+    var w1 = new Wall(0, 0, 20, 1500);
+    world.CreateBody(w1.bodyDef).CreateFixture(w1.fixDef);
+    var w2 = new Wall(canvas.width, 0, 20, 1500);
+    world.CreateBody(w2.bodyDef).CreateFixture(w2.fixDef);
+    
+    var circ = new Circle(canvas.width / 2, 200, 32 / WORLD_SCALE);
+    circ.obj = world.CreateBody(circ.bodyDef)
+    circ.obj.CreateFixture(circ.fixDef);
+
+    var deb = new b2DebugDraw();
+    deb.SetSprite(ctx);
+    deb.SetDrawScale(WORLD_SCALE);
+    deb.SetFillAlpha(0.2);
+    deb.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+    world.SetDebugDraw(deb);
+    
+    function render(time) {
+        delta = time - lastFrame;
+        if (delta >= TICK) {
+
+            var pos = circ.obj.GetPosition();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, img.width, img.height, pos.x * WORLD_SCALE, pos.y * WORLD_SCALE, 64, 64);
+
+            var v = new b2Vec2(0, 0);
+            if (keys[37]) v.x -= 10;
+            if (keys[39]) v.x += 10;
+            if (keys[38]) {
+                var v2 = circ.obj.GetLinearVelocity();
+                if (v2.y <= circ.maxYVel) {
+                    v2.y = 8;
+                }
+                circ.obj.SetLinearVelocity(v2);
+            }
+
+            circ.obj.ApplyForce(v, circ.obj.GetWorldCenter());
+
+            world.Step(TICK, 5, 5);
+            world.DrawDebugData();
+            world.ClearForces();        
+
+            lastFrame = time;
+        }
+            
+        requestAnimationFrame(render);
+    }
+
+    document.addEventListener("keydown", function(event) {
+        keys[event.keyCode] = true;
+    });
+    
+    document.addEventListener("keyup", function(event) {
+        keys[event.keyCode] = false;
+    });
+    
+    render(0);
+    var total_circs = 0;
+    var MAX_CIRCS = 0;
+    function proc(){
+        if (total_circs < MAX_CIRCS) {
+            total_circs++;
+            var circs = new Circle(Math.random() * canvas.width, Math.random() * 900, Math.random() * 1);
+            circs.fixDef.friction = 5;
+            circs.fixDef.restitution = 1;
+            circs.fixDef.density = 0.05;
+            world.CreateBody(circs.bodyDef).CreateFixture(circs.fixDef);
+            setTimeout(proc, 500);
+        }
+    }
+    
+    proc();
+}   
+
+main();
+</script>
+    </body>
+</html>

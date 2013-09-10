@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<body>
+	<style>
+body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	background: #ddd;
+}
+
+canvas {
+	margin: 50px auto 0;
+	display: block;
+	box-shadow: inset 0 10px 150px #000;
+	background: url("/img/tetris/background-2.jpg") center;
+	background-size: 100% auto;
+}
+</style>
+
+	<script src="/lib/closure-library/closure/goog/base.js"></script>
+	<script src="/tetris/src/hvdoo/deps.js"></script>
+        <script src="/tetris/app.goog.js"></script>
+<script>
+var CELL_WIDTH = 64;
+var CELL_HEIGHT = 64;
+var GRID_WIDTH = 15;
+var GRID_HEIGHT = 10;
+
+main(CELL_WIDTH, CELL_HEIGHT, GRID_WIDTH, GRID_HEIGHT);
+</script>
+
+</body>
+</html>

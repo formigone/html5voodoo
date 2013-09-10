@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Block 2D</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+            html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background: #aaa;
+                overflow: hidden;
+            }
+            
+            canvas {
+                display: block;
+                margin: 50px auto;
+                box-shadow: 0 20px 50px #555;
+            }
+        </style>
+    </head>
+    <body>
+<script src="/lib/box2d/box2d.js"></script>
+<script>
+var SCALE = 32;
+
+var Canvas = function(width, height) {
+    var canvas = document.createElement("canvas");
+    canvas.width = width || 100;
+    canvas.height = height || 100;
+    
+    var ctx = canvas.getContext("2d");
+    
+    this.getCanvas = function() {
+        return canvas;
+    };
+    
+    this.getRenderer = function() {
+        return ctx;
+    };
+    
+    this.clear = function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
+    
+    this.attach = function(container) {
+        container.appendChild(canvas);
+    };
+};
+
+var Sprite = function(x, y, width, height) {
+    var pos = {x: x || 0, y: y || 0};
+    var size = {width: width || 10, height: height || 10};
+    var img = new Image();
+    img.src = "mario-block-atlas.png";
+
+    var animFreq = 6;
+    var animFreqCt = 0;
+    var cur = 0;
+    var frames = [
+        {x: 0, y: 23, w: 33, h: 32},
+        {x: 32, y: 23, w: 33, h: 32},
+        {x: 64, y: 23, w: 33, h: 32},
+        {x: 96, y: 23, w: 33, h: 32},
+        {x: 128, y: 23, w: 33, h: 32},
+        {x: 160, y: 23, w: 33, h: 32},
+        {x: 192, y: 23, w: 33, h: 32},
+        {x: 224, y: 23, w: 33, h: 32},
+        {x: 256, y: 23, w: 33, h: 32},
+        {x: 288, y: 23, w: 33, h: 32},
+        {x: 0, y: 54, w: 33, h: 32},
+        {x: 64, y: 54, w: 33, h: 32},
+        {x: 96, y: 54, w: 33, h: 32},
+        {x: 128, y: 54, w: 33, h: 32}
+    ];
+    
+    this.draw = function(ctx) {
+        if (++animFreqCt >= animFreq) {
+            animFreqCt = 0;
+            cur = (cur + 1) % frames.length;
+        }
+        
+        ctx.drawImage(img, frames[cur].x, frames[cur].y, frames[cur].w, frames[cur].h, pos.x, pos.y, size.width, size.height);
+    };
+};
+
+var Wall = function(x, y, w, h, world) {
+    this.bodyDef = new b2BodyDef();
+    this.bodyDef.type = b2Body.b2_staticBody;
+    this.bodyDef.position.Set(x / SCALE, y / SCALE);
+    
+    this.shape = new b2PolygonShape();
+    this.shape.SetAsBox(w * 0.5 / SCALE, h * 0.5 / SCALE);
+    
+    this.fixDef = new b2FixtureDef();
+    this.fixDef.shape = this.shape;
+    
+    this.body = world.CreateBody(this.bodyDef);
+    this.body.CreateFixture(this.fixDef);
+};
+
+var DebRenderFactory = function(ctx) {
+    var deb = new b2DebugDraw();
+    deb.SetSprite(ctx);
+    deb.SetDrawScale(SCALE);
+    deb.SetFillAlpha(0.25);
+    deb.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+    
+    return deb;
+};
+
+function main() {
+    var canvas = new Canvas(900, 400);
+    canvas.attach(document.body);
+    
+    var block = new Sprite(50, 50, 64, 64);
+//var v = new HVdoo.util.math.Vec2();
+
+    var FHZ = 1/32;
+    var lastFrame = 0;
+    var delta = 0;
+    
+    var renderer = canvas.getRenderer();
+    var deb = DebRenderFactory(renderer);
+    
+    var world = new b2World(new b2Vec2(0, 10), true);
+    var floor = new Wall(canvas.width / 2, 0, canvas.width, 20, world);
+
+    world.SetDebugDraw(deb);
+    function run(now) {
+        delta = now - lastFrame;
+        
+        if (delta >= FHZ) {
+            block.draw(renderer);
+            lastFrame = now;
+        }
+        
+        requestAnimationFrame(run);
+    }
+    
+    run(0);
+}
+
+main();
+</script>
+    </body>
+</html>

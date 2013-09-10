@@ -1,128 +1,132 @@
 <!doctype html>
 <html>
-<body>
-	<style>
-body {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: 100%;
-	background: #ddd;
-}
+    <body>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                background: #ddd;
+            }
 
-canvas {
-	margin: 50px auto 0;
-	display: block;
-	box-shadow: inset 0 10px 150px #000;
-	background: url("/img/tetris/background-2.jpg") center;
-	background-size: 100% auto;
-}
-</style>
+            canvas {
+                margin: 50px auto 0;
+                display: block;
+                box-shadow: inset 0 10px 150px #000;
+                background: url("/img/tetris/background-2.jpg") center;
+                background-size: 100% auto;
+            }
+        </style>
 
-	<script src="app.js"></script>
-	<script>
-	   var CELL_WIDTH = 64;
-	   var CELL_HEIGHT = 64;
-	   var GRID_WIDTH = 22;
-	   var GRID_HEIGHT = 11;
+        <script src="app.js"></script>
+        <script>
+            var CELL_WIDTH = 64;
+            var CELL_HEIGHT = 64;
+            var GRID_WIDTH = 22;
+            var GRID_HEIGHT = 11;
 
-		var block;
-		var board;
-		var canvas;
+            var block;
+            var board;
+            var canvas;
 
-		var pieceStep = new Step(20);
-		var aiStep = new Step(5);
+            var pieceStep = new Step(20);
+            var aiStep = new Step(5);
 
-		function run(time) {
-			pieceStep.update(time);
-			aiStep.update(time);
+            function run(time) {
+                pieceStep.update(time);
+                aiStep.update(time);
 
-			if (pieceStep.isReady()) {
-				board.updatePiece();
-            pieceStep.step(time);
-         }
+                if (pieceStep.isReady()) {
+                    board.updatePiece();
+                    pieceStep.step(time);
+                }
 
-			if (aiStep.isReady()) {
-			   board.update();
-            aiStep.step(time);
-         }
+                if (aiStep.isReady()) {
+                    board.update();
+                    aiStep.step(time);
+                }
 
-			canvas.clear();
-			board.draw(canvas);
-			requestAnimationFrame(run);
-		}
+                canvas.clear();
+                board.draw(canvas);
+                requestAnimationFrame(run);
+            }
 
-		function main() {
-			canvas = new Canvas(GRID_WIDTH * CELL_WIDTH, GRID_HEIGHT * CELL_HEIGHT);
-			canvas.render(document.body);
+            function main() {
+                canvas = new Canvas(GRID_WIDTH * CELL_WIDTH, GRID_HEIGHT * CELL_HEIGHT);
+                canvas.render(document.body);
 
-			var __x = parseInt(Math.random() * (GRID_WIDTH - 6));
-         if (__x < 0) {
-            __x = 1;
-         }
+                var __x = parseInt(Math.random() * (GRID_WIDTH - 6));
+                if (__x < 0) {
+                    __x = 1;
+                }
 
-			block = new Piece(__x, 0, genRandomShape());
-			board = new Board(GRID_WIDTH, GRID_HEIGHT, CELL_WIDTH, CELL_HEIGHT, block);
+                block = new Piece(__x, 0, genRandomShape());
+                board = new Board(GRID_WIDTH, GRID_HEIGHT, CELL_WIDTH, CELL_HEIGHT, block);
 
-			document.addEventListener("keydown", function(key) {
-				KEYS[key.keyCode] = true;
-			});
+                document.addEventListener("keydown", function(key) {
+                    KEYS[key.keyCode] = true;
+                });
 
-			document.addEventListener("keyup", function(key) {
-				KEYS[key.keyCode] = false;
-			});
+                document.addEventListener("keyup", function(key) {
+                    KEYS[key.keyCode] = false;
+                });
 
-			run(0);
-		}
+                run(0);
+            }
 
-		main();
-	</script>
+            main();
+        </script>
 
-</body>
+    </body>
 </html>
 <script language="thought/x-mind">
-x = i % shape.size.width;
-y = parseInt(i / shape.size.width);
+    x = i % shape.size.width;
+    y = parseInt(i / shape.size.width);
 
-p.render(pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height);
+    p.render(pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height);
 
 
-(0,0)    (4,0)
-  [ ][ ][ ][ ][ ]   0 1 2 3 4
-  [ ][ ][ ][ ][ ]   5 6 7 8 9
-  [ ][ ][ ][ ][ ]   0 1 2 3 4
-  [ ][ ][X][ ][ ]   5 6 7 8 9
-  [X][X][X][ ][ ]   0 1 2 3 4
-(0,4)    (4,4)
+    (0, 0)    (4, 0)
+            [ ][ ][ ][ ][ ]   0 1 2 3 4
+            [ ][ ][ ][ ][ ]   5 6 7 8 9
+            [ ][ ][ ][ ][ ]   0 1 2 3 4
+            [ ][ ][X][ ][ ]   5 6 7 8 9
+            [X][X][X][ ][ ]   0 1 2 3 4
+            (0, 4)(4, 4)
 
-(0,3) : (3x2) @
-(15), (16), (17),
-(20), (21), (22) $$
+            (0, 3)
+    : (3x2) @
+            (15), (16), (17),
+            (20), (21), (22)
+    $$
 
-_offset = y * grid.width + x;
+            _offset = y * grid.width + x;
 
-for all:
+    for all:
 
-_p = _offset + (i * _y) + (i % _w)
+            _p = _offset + (i * _y) + (i % _w)
 
-end
+    end
 
-_x = i % shape.size.width;
-_y = parseInt(i / shape.size.width);
-0 1 2 3 4 5
-0 0 0 1 1 1
+    _x = i % shape.size.width;
+    _y = parseInt(i / shape.size.width);
+    0
+    1 2 3 4 5
+            0
+    0 0 1 1 1
 
-(_y + y) * grid.cols + i
-3 * 5 + 0 = 15
+            (_y + y) * grid.cols + i
+    3 * 5 + 0 = 15
 
-3 * 5 + 0 = 15
-3 * 5 + 1 = 16
-3 * 5 + 2 = 17
+            3 * 5 + 0 = 15
+            3 * 5 + 1 = 16
+            3 * 5 + 2 = 17
 
-3 * 5 + 0 = 15
+            3 * 5 + 0 = 15
 
-4 * 5 + 0 = 20
-4 * 5 + 1 = 21
-4 * 5 + 2 = 22
+            4 * 5 + 0 = 20
+            4 * 5 + 1 = 21
+            4 * 5 + 2 = 22
 
 </script>
