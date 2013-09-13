@@ -3,6 +3,8 @@ goog.require("hvdoo.tetris.Canvas");
 goog.require("hvdoo.tetris.Step");
 goog.require("hvdoo.tetris.input");
 goog.require("hvdoo.tetris.util");
+goog.require("goog.events");
+goog.require("goog.events.EventType");
 
 function main(cellWidth, cellHeight, gridWidth, gridHeight) {
     canvas = new hvdoo.tetris.Canvas(gridWidth * cellWidth, gridHeight * cellHeight);
@@ -17,16 +19,16 @@ function main(cellWidth, cellHeight, gridWidth, gridHeight) {
     block = new hvdoo.tetris.Piece(__x, 0, hvdoo.tetris.util.genRandomShape(), hvdoo.tetris.util.genRandomSprite(cellWidth, cellHeight));
     board = new hvdoo.tetris.Board(gridWidth, gridHeight, cellWidth, cellHeight, block, keyboard);
 
-    document.addEventListener("keydown", function(key) {
+    goog.events.listen(document.body, goog.events.EventType.KEYDOWN, function(key) {
         keyboard.set(key.keyCode, true);
     });
 
-    document.addEventListener("keyup", function(key) {
+    goog.events.listen(document.body, goog.events.EventType.KEYUP, function(key) {
         keyboard.set(key.keyCode, false);
     });
 
     var pieceStep = new hvdoo.tetris.Step(20);
-    var aiStep = new hvdoo.tetris.Step(5);
+    var aiStep = new hvdoo.tetris.Step(1);
 
     function run(time) {
         pieceStep.update(time);
