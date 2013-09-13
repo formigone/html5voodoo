@@ -22,7 +22,7 @@ hvdoo.tetris.util.genRandomShape = function() {
 			width : 4,
 			height : 2
 		},
-		map : [ 1, 1, 1, 1, 0, 0, 0, 0 ]
+		map : [ 0, 0, 0, 0, 1, 1, 1, 1]
 	}, {
 		size : {
 			width : 2,

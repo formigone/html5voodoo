@@ -34,41 +34,41 @@ hvdoo.tetris.Board = function(cols, rows, width, height, pPiece, pInput) {
         filledCells[i] = false;
     }
 
-    var __isValidMove = function(x, y) {
-
-        var shape = piece.getShape();
-        var _map = shape.map;
-        var _w = shape.size.width;
-        var _h = shape.size.height;
-        var _y;
-        var _p;
-        var _offset;
-        var _vOffset = shape.size.height > 1 ? 1 : 0;
-
-        if (x < 0) {
-            return false;
-        }
-
-        if (x + _w > grid.cols) {
-            return false;
-        }
-
-        if (y + _h > grid.rows) {
-            return false;
-        }
-
-        for (var i = 0, len = _map.length; i < len; i++) {
-            _y = parseInt(i / _w) + 1;
-            _offset = (y + _y - _vOffset) * grid.cols + x;
-            _p = _offset + (i % _w);
-
-            if (filledCells[_p] && _map[i] == 1) {
-                return false;
-            }
-        }
-
-        return true;
-    };
+//    var __isValidMove = function(x, y) {
+//
+//        var shape = piece.getShape();
+//        var _map = shape.map;
+//        var _w = shape.size.width;
+//        var _h = shape.size.height;
+//        var _y;
+//        var _p;
+//        var _offset;
+//        var _vOffset = shape.size.height > 1 ? 1 : 0;
+//
+//        if (x < 0) {
+//            return false;
+//        }
+//
+//        if (x + _w > grid.cols) {
+//            return false;
+//        }
+//
+//        if (y + _h > grid.rows) {
+//            return false;
+//        }
+//
+//        for (var i = 0, len = _map.length; i < len; i++) {
+//            _y = parseInt(i / _w) + 1;
+//            _offset = (y + _y - _vOffset) * grid.cols + x;
+//            _p = _offset + (i % _w);
+//
+//            if (filledCells[_p] && _map[i] == 1) {
+//                return false;
+//            }
+//        }
+//
+//        return true;
+//    };
 
     this.updatePiece = function() {
         var pos = piece.getPos();
@@ -102,6 +102,12 @@ hvdoo.tetris.Board = function(cols, rows, width, height, pPiece, pInput) {
         var shape = piece.getShape();
         var _size = shape.size;
 
+        if (this.isValidMove(piece, pos.x, pos.y + 1, grid, filledCells)) {
+            piece.moveBy(0, 1);
+        } else {
+            needsNewPiece = true;
+        }
+        
         if (needsNewPiece) {
             var _y;
             var _offset;
@@ -151,8 +157,7 @@ hvdoo.tetris.Board = function(cols, rows, width, height, pPiece, pInput) {
             var y = parseInt(i / shape.size.width);
 
             if (shape.map[i]) {
-                piece.render(canvas, pos.x * cell.width + x * cell.width, pos.y
-                        * cell.height + y * cell.height);
+                piece.render(canvas, pos.x * cell.width + x * cell.width, pos.y * cell.height + y * cell.height);
             }
         }
 
