@@ -20,9 +20,16 @@ hvdoo.tetris.util.genRandomShape = function() {
 	{
 		size : {
 			width : 4,
-			height : 2
+			height : 1
 		},
-		map : [ 0, 0, 0, 0, 1, 1, 1, 1]
+		map : [1, 1, 1, 1],
+                rotations : [
+                    [1, 1, 1, 1],
+                    [1, 1, 1, 1]
+                ],
+                offsets : [
+                    1, 1
+                ]
 	}, {
 		size : {
 			width : 2,
@@ -62,7 +69,7 @@ hvdoo.tetris.util.genRandomShape = function() {
 	} ];
 
 	var rand = parseInt(Math.random() * shapes.length);
-//	rand = 1;
+	rand = 0;
 // console.log("Shape #" + rand + ": (" + shapes[rand].size.width + ", " +
 // shapes[rand].size.height + ")");
 // console.log(" " + shapes[rand].map.slice(0, shapes[rand].size.width) +

@@ -83,6 +83,14 @@ hvdoo.tetris.Board = function(cols, rows, width, height, pPiece, pInput) {
             }
         }
 
+        if (input.isPressed(input.KEY_MAPPING.UP_KEY)) {
+            piece.rotate();
+            if (this.isValidMove(piece, pos.x, pos.y, grid, filledCells)) {
+                piece.moveBy(-1, 0);
+                pos = piece.getPos();
+            }
+        }
+
         if (input.isPressed(input.KEY_MAPPING.LEFT_KEY)) {
             if (this.isValidMove(piece, pos.x - 1, pos.y, grid, filledCells)) {
                 piece.moveBy(-1, 0);
@@ -102,12 +110,12 @@ hvdoo.tetris.Board = function(cols, rows, width, height, pPiece, pInput) {
         var shape = piece.getShape();
         var _size = shape.size;
 
-        if (this.isValidMove(piece, pos.x, pos.y + 1, grid, filledCells)) {
-            piece.moveBy(0, 1);
-        } else {
-            needsNewPiece = true;
-        }
-        
+//        if (this.isValidMove(piece, pos.x, pos.y + 1, grid, filledCells)) {
+//            piece.moveBy(0, 1);
+//        } else {
+//            needsNewPiece = true;
+//        }
+
         if (needsNewPiece) {
             var _y;
             var _offset;
@@ -190,11 +198,16 @@ hvdoo.tetris.Board.prototype.isValidMove = function(piece, x, y, grid, filledCel
     }
 
     for (var i = 0, len = _map.length; i < len; i++) {
-        _y = parseInt(i / _w) + 1;
+        _y = parseInt(i / _w) + 0;//1;
+//        if (_y == 1) {
+//            _y = 0;
+//        }
+        
         _offset = (y + _y - _vOffset) * grid.cols + x;
         _p = _offset + (i % _w);
 
         if (filledCells[_p] && _map[i] == 1) {
+            console.log("!");
             return false;
         }
     }
