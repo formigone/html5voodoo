@@ -26,7 +26,6 @@ rokko.entities.Entity.prototype.getComponents = function() {
 
 /**
  *
- * @param {string} id
  * @param {rokko.components.Component} comp
  */
 rokko.entities.Entity.prototype.addComponent = function(comp) {
@@ -40,8 +39,4 @@ rokko.entities.Entity.prototype.addComponent = function(comp) {
  */
 rokko.entities.Entity.prototype.getComponent = function(id) {
     return this.components[id] || null;
-};
-
-rokko.entities.Entity.prototype.draw = function() {
-    this.components[rokko.components.DrawComponent.ID].exec(this);
 };

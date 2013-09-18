@@ -37,8 +37,7 @@ See the COPYING file for details.
     function testEntityAddToComponentList() {
         var ent = new rokko.entities.Entity();
         var someComp = new rokko.components.MoveComponent();
-        var KEY = "MY_COMP";
-        ent.addComponent(KEY, someComp);
+        ent.addComponent(someComp);
 
         var comps = ent.getComponents();
         var total = 0;
@@ -47,30 +46,29 @@ See the COPYING file for details.
         }
 
         assertTrue("Should have 1 component so far", total == 1);
-        assertTrue("Should same component that went in", comps[KEY] === someComp);
+        assertTrue("Should same component that went in", comps[someComp.ID] === someComp);
 
         var someOtherComp = new rokko.components.MoveComponent();
-        comps[KEY] = someOtherComp;
+        comps[someOtherComp.ID] = someOtherComp;
 
-        assertFalse("Should *not* same component that went in anymore", comps[KEY] === someComp);
+        assertFalse("Should *not* same component that went in anymore", comps[someComp.ID] === someComp);
 
-        ent.addComponent(KEY, someOtherComp);
+        ent.addComponent(someOtherComp);
         comps = ent.getComponents();
 
-        assertFalse("Newly added comps should override if using same key", comps[KEY] === someComp);
-        assertTrue("Newly added comps should override if using same key", comps[KEY] === someOtherComp);
+        assertFalse("Newly added comps should override if using same key", comps[someComp.ID] === someComp);
+        assertTrue("Newly added comps should override if using same key", comps[someOtherComp.ID] === someOtherComp);
     }
 
     function testEntityRetrieveFromComponentList() {
         var ent = new rokko.entities.Entity();
         var someComp = new rokko.components.MoveComponent();
-        var KEY = "MY_COMP";
-        ent.addComponent(KEY, someComp);
+        ent.addComponent(someComp);
 
-        var shouldBeSameComp = ent.getComponent(KEY);
+        var shouldBeSameComp = ent.getComponent(someComp.ID);
 
         assertTrue("Should return same component that went in", someComp === shouldBeSameComp);
-        assertTrue("Should return null if component not found", goog.isNull(ent.getComponent("fake_" + KEY)));
+        assertTrue("Should return null if component not found", goog.isNull(ent.getComponent("fake_" + shouldBeSameComp.ID)));
     }
 </script>
 </body>

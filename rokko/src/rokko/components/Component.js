@@ -2,7 +2,7 @@ goog.provide("rokko.components.Component");
 
 /**
  *
- * @interface
+ * @constructor
  */
 rokko.components.Component = function() {};
 
@@ -13,4 +13,4 @@ rokko.components.Component = function() {};
 rokko.components.Component.prototype.exec = function(entity){};
 
 /** @type {string} */
-rokko.components.Component.prototype.ID;
+rokko.components.Component.prototype.ID = "__ROKKO_COMPONENT__";

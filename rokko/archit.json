@@ -1,0 +1,8 @@
+{
+    "RendererComponent::Component" : {
+        "_renderer" : "DrawComponent",
+        "_entities" : "[Entity]",
+        "_scene" : "Scene",
+        "exec" : "function(){}"
+    }
+}

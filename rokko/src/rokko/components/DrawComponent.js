@@ -6,9 +6,11 @@ goog.require("goog.dom");
 /**
  *
  * @constructor
- * @implements {rokko.components.Component}
+ * @extends {rokko.components.Component}
  */
 rokko.components.DrawComponent = function(width, height) {
+    goog.base(this);
+
     /** @private */
     /** @type {HTMLCanvasElement} */
     this.canvas = goog.dom.createDom("canvas", {width: width || 800, height: height || 450});
@@ -17,6 +19,8 @@ rokko.components.DrawComponent = function(width, height) {
     /** @type {CanvasRenderingContext2D} */
     this.ctx = this.canvas.getContext("2d");
 };
+
+goog.inherits(rokko.components.DrawComponent, rokko.components.Component);
 
 /** @inheritDoc */
 rokko.components.DrawComponent.prototype.exec = function(entity){
