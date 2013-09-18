@@ -1,3 +1,5 @@
+goog.provide("rokko.go");
+
 goog.require("rokko.entities.Entity");
 goog.require("rokko.components.DrawComponent");
 goog.require("rokko.components.RendererComponent");
@@ -12,3 +14,5 @@ function main(){
     renderer.addEntity(hero);
     renderer.exec();
 }
+
+goog.exportSymbol("main", main);

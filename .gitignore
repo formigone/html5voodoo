@@ -6,4 +6,5 @@ nbproject
 .settings/
 js/out/tmp
 *.*~
-
+*/out/
+*/out/*
