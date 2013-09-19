@@ -24,8 +24,11 @@ goog.inherits(rokko.components.DrawComponent, rokko.components.Component);
 
 /** @inheritDoc */
 rokko.components.DrawComponent.prototype.exec = function(entity){
-    console.log(entity.sprite.img);
-    this.ctx.drawImage(entity.sprite.img, entity.sprite.pos.x, entity.sprite.pos.y, entity.sprite.size.w, entity.sprite.size.h, entity.pos.x, entity.pos.y, entity.size.w, entity.size.h);
+    var img = entity.sprite.getImage();
+    var pos = img.getPos();
+    var size = img.getSize();
+
+    this.ctx.drawImage(img.getImage(), pos.x, pos.y, size.w, size.h, entity.pos.x, entity.pos.y, entity.size.w, entity.size.h);
 };
 
 /** @inheritDoc */

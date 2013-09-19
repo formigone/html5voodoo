@@ -6,7 +6,7 @@ goog.require("rokko.components.DrawComponent");
 /**
  * @param {number} pos Position vector
  * @param {number} size Size vector
- * @param {rokko.util.Sprite} sprite Sprite
+ * @param {rokko.graphics.Sprite} sprite Sprite
  *
  * @constructor
  */
