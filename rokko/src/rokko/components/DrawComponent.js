@@ -23,12 +23,13 @@ rokko.components.DrawComponent = function(width, height) {
 goog.inherits(rokko.components.DrawComponent, rokko.components.Component);
 
 /** @inheritDoc */
-rokko.components.DrawComponent.prototype.exec = function(entity){
+rokko.components.DrawComponent.prototype.exec = function(entity, time){
     var img = entity.sprite.getImage();
+    var el = img.getElement(time);
     var pos = img.getPos();
     var size = img.getSize();
 
-    this.ctx.drawImage(img.getElement(), pos.x, pos.y, size.w, size.h, entity.pos.x, entity.pos.y, entity.size.w, entity.size.h);
+    this.ctx.drawImage(el, pos.x, pos.y, size.w, size.h, entity.pos.x, entity.pos.y, entity.size.w, entity.size.h);
 };
 
 /** @inheritDoc */

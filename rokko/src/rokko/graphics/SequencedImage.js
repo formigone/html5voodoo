@@ -32,9 +32,12 @@ goog.inherits(rokko.graphics.SequencedImage, rokko.graphics.Image);
  * @inheritDoc
  * @returns {HTMLImageElement}
  */
-rokko.graphics.SequencedImage.prototype.getElement = function(){
-    // TODO: Use time & freq to calculate last frame
-    this.currFrame = (this.currFrame + 1) % this.frames.length;
+rokko.graphics.SequencedImage.prototype.getElement = function(time){
+    console.log(time, this.lastTime);
+    if (time >= this.lastTime + this.freq) {
+        this.lastTime = time;
+        this.currFrame = (this.currFrame + 1) % this.frames.length;
+    }
 
     return this.img;
 };

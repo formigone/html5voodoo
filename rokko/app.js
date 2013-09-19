@@ -23,7 +23,7 @@ function main(){
         frames: [
             {
                 pos: {
-                    x: 120,
+                    x: 122,
                     y: 0
                 },
                 size: {
@@ -42,7 +42,7 @@ function main(){
                 }
             }
         ],
-        freq: 100
+        freq: 500
     });
 
     var sprite = new rokko.graphics.Sprite(seqImg);
@@ -55,12 +55,12 @@ function main(){
 
     renderer.addEntity(hero);
 
-    function go() {
-        renderer.exec();
+    function go(time) {
+        renderer.exec(time);
         requestAnimationFrame(go);
     }
 
-    go();
+    go(0);
 }
 
 goog.exportSymbol("main", main);
