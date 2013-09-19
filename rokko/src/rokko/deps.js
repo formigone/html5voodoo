@@ -5,3 +5,4 @@ goog.addDependency('../../../../rokko/src/rokko/components/DrawComponent.js', ['
 goog.addDependency('../../../../rokko/src/rokko/components/MoveComponent.js', ['rokko.components.MoveComponent'], ['rokko.components.Component']);
 goog.addDependency('../../../../rokko/src/rokko/components/RendererComponent.js', ['rokko.components.RendererComponent'], ['goog.dom', 'rokko.components.Component']);
 goog.addDependency('../../../../rokko/src/rokko/entities/Entity.js', ['rokko.entities.Entity'], ['rokko.components.Component', 'rokko.components.DrawComponent']);
+goog.addDependency('../../../../rokko/src/rokko/util/Sprite.js', ['rokko.util.Sprite'], []);

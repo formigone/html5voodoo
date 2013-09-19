@@ -24,8 +24,8 @@ goog.inherits(rokko.components.DrawComponent, rokko.components.Component);
 
 /** @inheritDoc */
 rokko.components.DrawComponent.prototype.exec = function(entity){
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.fillRect(entity.pos.x, entity.pos.y, entity.size.w, entity.size.h);
+    console.log(entity.sprite.img);
+    this.ctx.drawImage(entity.sprite.img, entity.sprite.pos.x, entity.sprite.pos.y, entity.sprite.size.w, entity.sprite.size.h, entity.pos.x, entity.pos.y, entity.size.w, entity.size.h);
 };
 
 /** @inheritDoc */
@@ -33,4 +33,8 @@ rokko.components.DrawComponent.prototype.ID = "__DRAW_COMPONENT__";
 
 rokko.components.DrawComponent.prototype.show = function(container){
     container.appendChild(this.canvas);
+};
+
+rokko.components.DrawComponent.prototype.clear = function(){
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 };

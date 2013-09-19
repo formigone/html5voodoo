@@ -24,6 +24,8 @@ goog.inherits(rokko.components.RendererComponent, rokko.components.Component);
 
 /** @inheritDoc */
 rokko.components.RendererComponent.prototype.exec = function () {
+    this.drawComponent.clear();
+
     for (var i = 0, len = this.entities.length; i < len; i++) {
         this.drawComponent.exec(this.entities[i]);
     }
