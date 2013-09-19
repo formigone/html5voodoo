@@ -3,6 +3,7 @@ goog.provide("rokko.go");
 goog.require("rokko.entities.Entity");
 goog.require("rokko.graphics.Sprite");
 goog.require("rokko.graphics.Image");
+goog.require("rokko.graphics.SequencedImage");
 goog.require("rokko.components.DrawComponent");
 goog.require("rokko.components.RendererComponent");
 
@@ -18,7 +19,33 @@ function main(){
         }
     });
 
-    var sprite = new rokko.graphics.Sprite(img);
+    var seqImg = new rokko.graphics.SequencedImage("/img/tetris/ssfiv-8bit.jpg", {
+        frames: [
+            {
+                pos: {
+                    x: 120,
+                    y: 0
+                },
+                size: {
+                    w: 112,
+                    h: 132
+                }
+            },
+            {
+                pos: {
+                    x: 0,
+                    y: 0
+                },
+                size: {
+                    w: 112,
+                    h: 132
+                }
+            }
+        ],
+        freq: 100
+    });
+
+    var sprite = new rokko.graphics.Sprite(seqImg);
 
     var hero = new rokko.entities.Entity({x: 100, y: 150}, {w: 112, h: 132}, sprite);
     var canvas = new rokko.components.DrawComponent();

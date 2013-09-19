@@ -5,19 +5,18 @@ goog.require("goog.dom");
 /**
  *
  * @param {string} img
- * @param {Object} pos
- * @param {Object} size
+ * @param {Object} options
  * @constructor
  */
 rokko.graphics.Image = function(img, options) {
-    /** @private */
+    /** @protected */
     /** @type {HTMLImageElement} */
     this.img = goog.dom.createDom("img", {src: img});
 
-    /** @private */
+    /** @protected */
     this.pos = options.pos;
 
-    /** @private */
+    /** @protected */
     this.size = options.size;
 };
 
@@ -25,7 +24,7 @@ rokko.graphics.Image = function(img, options) {
  *
  * @returns {HTMLImageElement}
  */
-rokko.graphics.Image.prototype.getImage = function(){
+rokko.graphics.Image.prototype.getElement = function(){
     return this.img;
 };
 
