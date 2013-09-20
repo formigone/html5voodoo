@@ -17,7 +17,7 @@ rokko.graphics.SequencedImage = function(img, options) {
 
     /** @type {number} */
     /** @protected */
-    this.currFrame = 0;
+    this.currFrame = options.currFrame || 0;
 
     /** @type {number} */
     /** @protected */
@@ -33,7 +33,6 @@ goog.inherits(rokko.graphics.SequencedImage, rokko.graphics.Image);
  * @returns {HTMLImageElement}
  */
 rokko.graphics.SequencedImage.prototype.getElement = function(time){
-    console.log(time, this.lastTime);
     if (time >= this.lastTime + this.freq) {
         this.lastTime = time;
         this.currFrame = (this.currFrame + 1) % this.frames.length;
@@ -48,4 +47,8 @@ rokko.graphics.SequencedImage.prototype.getPos = function(){
 
 rokko.graphics.SequencedImage.prototype.getSize = function(){
     return this.frames[this.currFrame].size;
+};
+
+rokko.graphics.SequencedImage.prototype.resetFrame = function(){
+    this.currFrame = 0;
 };

@@ -8,7 +8,7 @@ goog.require("goog.dom");
  * @constructor
  * @extends {rokko.components.Component}
  */
-rokko.components.DrawComponent = function(width, height) {
+rokko.components.DrawComponent = function(width, height, smooth) {
     goog.base(this);
 
     /** @private */
@@ -18,6 +18,7 @@ rokko.components.DrawComponent = function(width, height) {
     /** @private */
     /** @type {CanvasRenderingContext2D} */
     this.ctx = this.canvas.getContext("2d");
+    this.ctx.webkitImageSmoothingEnabled = smooth || false;
 };
 
 goog.inherits(rokko.components.DrawComponent, rokko.components.Component);

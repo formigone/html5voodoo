@@ -8,46 +8,57 @@ goog.require("rokko.components.DrawComponent");
 goog.require("rokko.components.RendererComponent");
 
 function main(){
-    var img = new rokko.graphics.Image("/img/tetris/ssfiv-8bit.jpg", {
+    var img = new rokko.graphics.Image("/img/8bitmm.gif", {
         pos: {
-            x: 0,
-            y: 0
+            x: 105,
+            y: 11
         },
         size: {
-            w: 112,
-            h: 132
+            w: 21,
+            h: 24
         }
     });
 
-    var seqImg = new rokko.graphics.SequencedImage("/img/tetris/ssfiv-8bit.jpg", {
+    var seqImg = new rokko.graphics.SequencedImage("/img/8bitmm.gif", {
         frames: [
             {
                 pos: {
-                    x: 122,
-                    y: 0
+                    x: 189,
+                    y: 11
                 },
                 size: {
-                    w: 112,
-                    h: 132
+                    w: 26,
+                    h: 24
                 }
             },
             {
                 pos: {
-                    x: 0,
-                    y: 0
+                    x: 214,
+                    y: 11
                 },
                 size: {
-                    w: 112,
-                    h: 132
+                    w: 26,
+                    h: 24
+                }
+            },
+            {
+                pos: {
+                    x: 239,
+                    y: 11
+                },
+                size: {
+                    w: 26,
+                    h: 24
                 }
             }
         ],
-        freq: 500
+        freq: 100,
+        currFrame: 0
     });
 
     var sprite = new rokko.graphics.Sprite(seqImg);
 
-    var hero = new rokko.entities.Entity({x: 100, y: 150}, {w: 112, h: 132}, sprite);
+    var hero = new rokko.entities.Entity({x: 100, y: 150}, {w: 102, h: 98}, sprite);
     var canvas = new rokko.components.DrawComponent();
     var renderer = new rokko.components.RendererComponent(canvas);
 

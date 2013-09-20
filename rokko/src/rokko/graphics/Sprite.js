@@ -8,7 +8,7 @@ goog.require("rokko.graphics.Image");
  * @constructor
  */
 rokko.graphics.Sprite = function(img) {
-    /** @private */
+    /** @protected */
     /** @type {rokko.graphics.Image} */
     this.img = img;
 };

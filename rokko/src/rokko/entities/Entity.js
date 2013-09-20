@@ -28,6 +28,18 @@ rokko.entities.Entity.prototype.getComponents = function() {
     return this.components;
 };
 
+/** @enum */
+rokko.entities.Entity.prototype.EntityState = {
+    STANDING_LEFT: 0,
+    STANDING_RIGHT: 1,
+    WALKING_LEFT: 2,
+    WALKING_RIGHT: 3,
+    RUNNING_LEFT: 4,
+    RUNNING_RIGHT: 5,
+    JUMPING_UP: 6,
+    JUMPING_DOWN: 7
+};
+
 /**
  *
  * @param {rokko.components.Component} comp
