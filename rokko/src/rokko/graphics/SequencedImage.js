@@ -33,7 +33,7 @@ goog.inherits(rokko.graphics.SequencedImage, rokko.graphics.Image);
  * @returns {HTMLImageElement}
  */
 rokko.graphics.SequencedImage.prototype.getElement = function(time){
-    if (time >= this.lastTime + this.freq) {
+    if (time >= this.lastTime + (this.frames[this.currFrame].freq || this.freq)) {
         this.lastTime = time;
         this.currFrame = (this.currFrame + 1) % this.frames.length;
     }

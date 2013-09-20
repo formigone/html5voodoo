@@ -8,18 +8,47 @@ goog.require("rokko.components.DrawComponent");
 goog.require("rokko.components.RendererComponent");
 
 function main(){
-    var img = new rokko.graphics.Image("/img/8bitmm.gif", {
-        pos: {
-            x: 105,
-            y: 11
-        },
-        size: {
-            w: 21,
-            h: 24
-        }
+    var standing = new rokko.graphics.SequencedImage("/img/8bitmm.gif", {
+        frames: [
+            {
+                pos: {
+                    x: 105,
+                    y: 11
+                },
+                size: {
+                    w: 21,
+                    h: 24
+                },
+                freq: 1500
+            },
+            {
+                pos: {
+                    x: 135,
+                    y: 11
+                },
+                size: {
+                    w: 21,
+                    h: 24
+                },
+                freq: 100
+            },
+            {
+                pos: {
+                    x: 105,
+                    y: 11
+                },
+                size: {
+                    w: 21,
+                    h: 24
+                },
+                freq: 1500
+            }
+        ],
+        freq: 100,
+        currFrame: 0
     });
 
-    var seqImg = new rokko.graphics.SequencedImage("/img/8bitmm.gif", {
+    var running = new rokko.graphics.SequencedImage("/img/8bitmm.gif", {
         frames: [
             {
                 pos: {
@@ -56,7 +85,7 @@ function main(){
         currFrame: 0
     });
 
-    var sprite = new rokko.graphics.Sprite(seqImg);
+    var sprite = new rokko.graphics.Sprite(standing);
 
     var hero = new rokko.entities.Entity({x: 100, y: 150}, {w: 102, h: 98}, sprite);
     var canvas = new rokko.components.DrawComponent();
