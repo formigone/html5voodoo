@@ -30,7 +30,7 @@ rokko.components.DrawComponent.prototype.exec = function(entity, time){
     var pos = img.getPos();
     var size = img.getSize();
 
-    this.ctx.drawImage(el, pos.x, pos.y, size.w, size.h, entity.pos.x, entity.pos.y, entity.size.w, entity.size.h);
+    this.ctx.drawImage(el, pos.x, pos.y, size.w, size.h, entity.pos.x, entity.pos.y, entity.size.w || (size.w * entity.size.s), entity.size.h || (size.h * entity.size.s));
 };
 
 /** @inheritDoc */

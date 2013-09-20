@@ -49,6 +49,7 @@ function main(){
     });
 
     var running = new rokko.graphics.SequencedImage("/img/8bitmm.gif", {
+        // TODO: Make these targets as tight as they can be on each cell
         frames: [
             {
                 pos: {
@@ -81,7 +82,7 @@ function main(){
                 }
             }
         ],
-        freq: 100,
+        freq: 110,
         currFrame: 0
     });
 
@@ -92,8 +93,8 @@ function main(){
 
     // TODO: make entity size the same as img size. If entity size is always the same, then Mega Man can't fit under a low ceiling by sliding...
     // Maybe I can use a scaling factor? Only way this would work is if the same src image is always the same, and the renderer scales each size component before each draw. ** Might be much, much easier to simply always set entity.size === img.size and create new src image for each game that wants different size sprites **
-    var hero = new rokko.entities.Entity({x: 100, y: 150}, {w: 102, h: 98}, sprites.standing);
-    var hero2 = new rokko.entities.Entity({x: 300, y: 150}, {w: 102, h: 98}, sprites.running);
+    var hero = new rokko.entities.Entity({x: 100, y: 150}, {x: null, h: null, s: 7.5}, sprites.standing);
+    var hero2 = new rokko.entities.Entity({x: 300, y: 150}, {x: null, h: null, s: 3.5}, sprites.running);
 
     var canvas = new rokko.components.DrawComponent();
     var renderer = new rokko.components.RendererComponent(canvas);
