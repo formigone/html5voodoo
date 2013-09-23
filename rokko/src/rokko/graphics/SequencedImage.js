@@ -25,6 +25,10 @@ rokko.graphics.SequencedImage = function(img, options) {
 
     /** @protected */
     this.frames = options.frames;
+
+    /** @protected */
+    /** @type {boolean} */
+    this.loop = options.loop || true;
 };
 goog.inherits(rokko.graphics.SequencedImage, rokko.graphics.Image);
 

@@ -7,10 +7,13 @@ goog.require("rokko.components.DrawComponent");
  * @param {number} pos Position vector
  * @param {number} size Size vector
  * @param {rokko.graphics.Sprite} sprite Sprite
+ * @param {Object} options
  *
  * @constructor
  */
-rokko.entities.Entity = function(pos, size, sprite) {
+rokko.entities.Entity = function(pos, size, sprite, options) {
+    options = options || {};
+
     /** @protected */
     this.components = {};
 
@@ -22,6 +25,9 @@ rokko.entities.Entity = function(pos, size, sprite) {
 
     /** @protected */
     this.sprite = sprite;
+
+    /** @protected */
+    this.state = options.state || rokko.entities.Entity.EntityState.STANDING_RIGHT;
 };
 
 rokko.entities.Entity.prototype.getComponents = function() {
@@ -29,7 +35,7 @@ rokko.entities.Entity.prototype.getComponents = function() {
 };
 
 /** @enum */
-rokko.entities.Entity.prototype.EntityState = {
+rokko.entities.Entity.EntityState = {
     STANDING_LEFT: 0,
     STANDING_RIGHT: 1,
     WALKING_LEFT: 2,

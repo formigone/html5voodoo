@@ -31,6 +31,13 @@ rokko.components.DrawComponent.prototype.exec = function(entity, time){
     var size = img.getSize();
 
     this.ctx.drawImage(el, pos.x, pos.y, size.w, size.h, entity.pos.x, entity.pos.y, entity.size.w || (size.w * entity.size.s), entity.size.h || (size.h * entity.size.s));
+
+    // DEBUGGING;
+    // TODO: Remove this whole thing altogether before deploying. Only conditionally removing it will definitely impact performance on final product
+    this.ctx.strokeStyle = "#cc0000";
+    this.ctx.beginPath();
+    this.ctx.rect(entity.pos.x, entity.pos.y, entity.size.w || (size.w * entity.size.s), entity.size.h || (size.h * entity.size.s));
+    this.ctx.stroke();
 };
 
 /** @inheritDoc */
