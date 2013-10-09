@@ -7,6 +7,9 @@ handlers:
 - url: /img
   static_dir: img
 
+- url: /sound
+  static_dir: sound
+
 - url: /js
   static_dir: js
 
@@ -15,6 +18,9 @@ handlers:
 
 - url: /tetris
   script: tetris/index.html
+
+- url: /rain
+  script: rain.html
 
 - url: /.*
   script: index.html
