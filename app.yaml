@@ -22,6 +22,9 @@ handlers:
 - url: /rain
   script: rain.html
 
+- url: /angularjs-terrible-performance
+  script: angularjs-terrible-performance.html
+
 - url: /.*
   script: index.html
 
